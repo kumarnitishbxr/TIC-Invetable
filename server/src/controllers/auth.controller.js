@@ -2,7 +2,7 @@ import { validate } from '../Utils/Validate.js'
 import jwt from 'jsonwebtoken'
 import User from '../models/user.model.js'
 import bcrypt from 'bcrypt';
-// import redisClient from '../config/Redis.js';
+import redisClient from '../config/redis.config.js';
 
 export const Register = async (req, res) => {
     try{
@@ -118,9 +118,10 @@ export const Login = async (req, res) => {
    }
 };
 
-export const logout = async (req, res) => {
+export const Logout = async (req, res) => {
    try{
       const {Token} = req.cookies;
+      console.log(Token);
       if(!Token) return res.status(400).json({success: false, message: "No active sessions"});
 
       const payload = jwt.decode(Token);
