@@ -12,10 +12,12 @@ const jobSchema = new mongoose.Schema({
       trim: true,
    },
    category: {
+      type: String,
       enum: ['General', 'Cleaning', 'Electrical', 'Plumbing', 'Painting', 'Other'],
       default: 'General',
    },
    employmentType: {
+      type: String,
       enum: ['Part-time', 'Full-time'],
       default: 'Full-time',
    },
@@ -27,6 +29,7 @@ const jobSchema = new mongoose.Schema({
       default: 'Daily',
    },
    experienceLevel: {
+      type: String,
       enum: ['Entry Level', 'Intermediate', 'Advanced', 'Expert'],
       default: 'Entry Level',
    },
@@ -45,7 +48,7 @@ const jobSchema = new mongoose.Schema({
          ref: 'User',
       },
    ],
-   assignedLaborer: {
+   assignedEmployee: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
    },

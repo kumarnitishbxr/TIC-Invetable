@@ -7,7 +7,7 @@ import redisClient from "./src/config/redis.config.js";
 const PORT = process.env.PORT || 3000;
 
 const bootstrap = async () => {
-    await Promise.all[connectToDB(), redisClient.connect()];
+    await Promise.all([connectToDB(), redisClient.connect()]);
     app.listen(PORT, () => {
         console.log(`app listening on port ${PORT}`);
     })

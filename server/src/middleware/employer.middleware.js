@@ -18,7 +18,7 @@ const authenticateEmployer = async (req, res, next)=>{
       const payload = jwt.verify(Token, process.env.SECRET_KEY)
 
       if(payload?.role != 'employer')
-         return res.status(401).json({message: "you're not admin"})
+         return res.status(401).json({message: "you're not Employer"})
 
       const isBlocked = await redisClient.exists(`Token ${Token}`)
       if(isBlocked)
