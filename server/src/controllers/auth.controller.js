@@ -2,7 +2,7 @@ import { validate } from '../Utils/Validate.js'
 import jwt from 'jsonwebtoken'
 import User from '../models/user.model.js'
 import bcrypt from 'bcrypt';
-// import redisClient from '../config/Redis.js';
+import redisClient from '../config/redis.config.js';
 
 export const Register = async (req, res) => {
     try{
@@ -117,3 +117,43 @@ export const Login = async (req, res) => {
       });
    }
 };
+
+export const logout = async (req, res) => {
+   try{
+      const {Token} = req.cookies;
+      if(!Token) return res.status(400).json({success: false, message: "No active sessions"});
+
+      const payload = jwt.decode(Token);
+      if(!payload) return res.status(400).json({message: "Invalid Token"});
+
+      await redisClient.set(`Token: ${Token}`, 'Blocked');
+      await redisClient.expireAt(`Token: ${Token}`, payload.exp);
+
+      res.clearCookie('Token');
+
+      return res.status(201).json({
+         success: true,
+         message: "User logged out successfully"
+      })
+   }catch(err){
+      return res.status(500).json({
+         message: "Internal server error",
+         error: err.message
+      })
+   }
+};
+
+export const validUser = async (req, res) => {
+   const reply = {
+      success: true,
+      Name: req.user?.Name,
+      emailId: req.user?.emailId,
+      _id: req.user?._id,
+      role: req.user?.role
+   }
+
+   res.status(200).json({
+      user: reply,
+      message: 'Valid user'
+   })
+}
