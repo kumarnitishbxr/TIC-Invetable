@@ -360,15 +360,17 @@ function Login() {
 
       <div className="lg-root">
         <div className="lg-wrap">
-    
+          {/* Heading */}
           <div className="lg-heading">
             <h2 className="lg-title">Welcome Back</h2>
             <p className="lg-sub">Enter your credentials to access your account</p>
           </div>
 
+          {/* Card */}
           <div className="lg-card">
             {error && <div className="lg-server-err">⚠ {error}</div>}
 
+            {/* Email */}
             <div className="lg-field">
               <label className="lg-label">Email Address</label>
               <div className="lg-input-wrap">
@@ -383,6 +385,7 @@ function Login() {
               {errors.emailId && <p className="lg-err">⚠ {errors.emailId.message}</p>}
             </div>
 
+            {/* Password */}
             <div className="lg-field">
               <div className="lg-label-row">
                 <label className="lg-label" style={{ marginBottom: 0 }}>Password</label>
@@ -404,11 +407,13 @@ function Login() {
               {errors.password && <p className="lg-err">⚠ {errors.password.message}</p>}
             </div>
 
+            {/* Remember me */}
             <div className="lg-remember">
               <input type="checkbox" id="remember" className="lg-checkbox" />
               <label htmlFor="remember" className="lg-remember-label">Remember me</label>
             </div>
 
+            {/* Submit */}
             <button onClick={handleSubmit(sendData)} disabled={loading} className="lg-submit">
               {loading ? (
                 <><div className="lg-spin" /> Logging in...</>
@@ -417,18 +422,21 @@ function Login() {
               )}
             </button>
 
+            {/* Divider */}
             <div className="lg-divider">
               <div className="lg-divider-line" />
               <span className="lg-divider-text">OR</span>
               <div className="lg-divider-line" />
             </div>
 
+            {/* Google */}
             <button onClick={handleGoogle} className="lg-google">
               <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style={{ width: 18, height: 18 }} />
               Continue with Google
             </button>
           </div>
 
+          {/* Sign up + Terms */}
           <div className="lg-signup-row">
             <span className="lg-signup-text">Don't have an account?</span>
             <NavLink to="/signup" className="lg-signup-link">Sign Up →</NavLink>

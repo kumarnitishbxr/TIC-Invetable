@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axiosClient from '../../API/axiosClient';
+import axiosClient from '../../API/axiosClient'
 
 
 
@@ -48,7 +48,7 @@ export const loginUser = createAsyncThunk(
 
 
 export const logoutUser = createAsyncThunk(
-    'auth/logout', 
+    'auth/logout',  //slice/route
     async (_, { rejectWithValue }) => {
         try {
             // console.log('logout')
@@ -94,6 +94,7 @@ const authSlice = createSlice({
 
         builder
 
+        // Register User Cases
         .addCase(registerUser.pending, (state) => {
             state.loading = true;
             state.error = null;
@@ -109,7 +110,8 @@ const authSlice = createSlice({
             state.isAuthenticated = false;
             state.user = null;
         })
-
+    
+        // Login User Cases
         .addCase(loginUser.pending, (state) => {
             state.loading = true;
             state.error = null;

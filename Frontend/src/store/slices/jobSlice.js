@@ -4,6 +4,7 @@ import axios from "axios";
 axios.defaults.baseURL = "http://localhost:5000";
 axios.defaults.withCredentials = true;
 
+// ================= CREATE JOB =================
 export const createJob = createAsyncThunk(
   "job/create",
   async (formData, { rejectWithValue }) => {
@@ -16,6 +17,7 @@ export const createJob = createAsyncThunk(
   }
 );
 
+// ================= GET SINGLE JOB =================
 export const getJob = createAsyncThunk(
   "job/getOne",
   async (id, { rejectWithValue }) => {
@@ -28,6 +30,7 @@ export const getJob = createAsyncThunk(
   }
 );
 
+// ================= LIST JOBS =================
 export const listJobs = createAsyncThunk(
   "job/list",
   async (_, { rejectWithValue }) => {
@@ -40,6 +43,7 @@ export const listJobs = createAsyncThunk(
   }
 );
 
+// ================= NEARBY JOBS =================
 export const nearbyJobs = createAsyncThunk(
   "job/nearby",
   async ({ lat, lng, maxDistance, skill }, { rejectWithValue }) => {
@@ -54,6 +58,7 @@ export const nearbyJobs = createAsyncThunk(
   }
 );
 
+// ================= APPLY JOB =================
 export const applyJob = createAsyncThunk(
   "job/apply",
   async ({ id, formData }, { rejectWithValue }) => {
@@ -66,6 +71,7 @@ export const applyJob = createAsyncThunk(
   }
 );
 
+// ================= ASSIGN JOB =================
 export const assignJob = createAsyncThunk(
   "job/assign",
   async ({ id, labourId }, { rejectWithValue }) => {
@@ -78,6 +84,7 @@ export const assignJob = createAsyncThunk(
   }
 );
 
+// ================= COMPLETE JOB =================
 export const completeJob = createAsyncThunk(
   "job/complete",
   async (id, { rejectWithValue }) => {
@@ -90,6 +97,7 @@ export const completeJob = createAsyncThunk(
   }
 );
 
+// ================= MY JOBS =================
 export const myJobs = createAsyncThunk(
   "job/myJobs",
   async (_, { rejectWithValue }) => {
@@ -102,6 +110,7 @@ export const myJobs = createAsyncThunk(
   }
 );
 
+// ================= SLICE =================
 const jobSlice = createSlice({
   name: "job",
   initialState: {
@@ -123,10 +132,12 @@ const jobSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
+      // ===== CREATE =====
       .addCase(createJob.fulfilled, (state, action) => {
         state.jobs.unshift(action.payload);
       })
 
+      // ===== LIST =====
       .addCase(listJobs.pending, (state) => {
         state.loading = true;
       })
@@ -135,18 +146,22 @@ const jobSlice = createSlice({
         state.jobs = action.payload;
       })
 
+      // ===== GET ONE =====
       .addCase(getJob.fulfilled, (state, action) => {
         state.selectedJob = action.payload;
       })
 
+      // ===== NEARBY =====
       .addCase(nearbyJobs.fulfilled, (state, action) => {
         state.nearbyJobs = action.payload;
       })
 
+      // ===== APPLY =====
       .addCase(applyJob.fulfilled, (state, action) => {
         state.message = action.payload.message;
       })
 
+      // ===== ASSIGN =====
       .addCase(assignJob.fulfilled, (state, action) => {
         const index = state.jobs.findIndex(
           j => j._id === action.payload._id
@@ -156,6 +171,7 @@ const jobSlice = createSlice({
         }
       })
 
+      // ===== COMPLETE =====
       .addCase(completeJob.fulfilled, (state, action) => {
         const index = state.jobs.findIndex(
           j => j._id === action.payload._id
@@ -165,6 +181,7 @@ const jobSlice = createSlice({
         }
       })
 
+      // ===== MY JOBS =====
       .addCase(myJobs.fulfilled, (state, action) => {
         state.myJobs = action.payload;
       });
