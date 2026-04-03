@@ -11,7 +11,8 @@ import {
 } from 'react-router-dom';
 
 import LandingPage from './pages/LandingPage';
-
+import Login from './pages/Login';
+import Register from './pages/Signup';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,6 +27,14 @@ function App() {
           <HeaderSwitcher/>
           <Routes>
               <Route path="/" element={<LandingPage />}></Route>
+              
+              <Route path="/login"
+                element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+              ></Route>
+
+              <Route path="/signup"
+                element={isAuthenticated ? <Navigate to="/" /> : <Reg />}
+              ></Route>
           </Routes>
       </Router>
   )
