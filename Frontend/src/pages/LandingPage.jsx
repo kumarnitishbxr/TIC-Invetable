@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Footer from "../components/layouts/Footer";
+import Footer from '../components/layouts/Footer'
 import { listJobs } from "../store/slices/jobSlice";
 
 
@@ -460,6 +460,50 @@ const CATEGORIES = [
   { icon: "🏪", name: "Retail", count: "113 jobs", bg: "rgba(176,109,255,0.1)" },
 ];
 
+//   {
+//     id: "job-001",
+//     emoji: "🌾",
+//     imgBg: "linear-gradient(135deg, #0f2217, #1a3a27)",
+//     badge: "NEW",
+//     badgeClass: "wl-badge-new",
+//     category: "Agriculture · 2.1 km away",
+//     title: "Field Harvester — Seasonal",
+//     rating: "4.8",
+//     employer: "Kumar Farms",
+//     priceColor: "var(--neon-green)",
+//     wage: "₹600",
+//     payType: "/ day",
+//   },
+//   {
+//     id: "job-002",
+//     emoji: "🏗️",
+//     imgBg: "linear-gradient(135deg, #1a1020, #2a1a38)",
+//     badge: "HOT",
+//     badgeClass: "wl-badge-hot",
+//     category: "Construction · 4.5 km away",
+//     title: "Masonry Helper",
+//     rating: "4.6",
+//     employer: "Rai Construction",
+//     priceColor: "var(--neon-blue)",
+//     wage: "₹700",
+//     payType: "/ day",
+//   },
+//   {
+//     id: "job-003",
+//     emoji: "💧",
+//     imgBg: "linear-gradient(135deg, #0d1a26, #122030)",
+//     badge: "URGENT",
+//     badgeClass: "wl-badge-sale",
+//     category: "Agriculture · 1.2 km away",
+//     title: "Irrigation Assistant",
+//     rating: "4.9",
+//     employer: "Sharma Farms",
+//     priceColor: "var(--neon-purple)",
+//     wage: "₹500",
+//     payType: "/ day",
+//   },
+// ];
+
 const TRENDING = [
   { emoji: "🔨", name: "Carpenter Helper", price: "₹650/day" },
   { emoji: "🚛", name: "Truck Loader", price: "₹550/day" },
@@ -480,6 +524,7 @@ const TRUST = [
   { icon: "🤝", bg: "rgba(0,255,179,0.1)", color: "var(--neon-green)", title: "One-tap Apply", desc: "No paperwork. Apply in seconds with your verified profile, get hired today." },
 ];
 
+// ── COUNTDOWN HOOK ────────────────────────────────────────────────────────
 function useCountdown(initialSeconds) {
   const [total, setTotal] = useState(initialSeconds);
   useEffect(() => {
@@ -493,7 +538,7 @@ function useCountdown(initialSeconds) {
 }
 
 export default function LandingPage() {
-
+  // Inject global CSS once
   useEffect(() => {
     const styleId = "worklink-global-styles";
     if (!document.getElementById(styleId)) {
@@ -530,6 +575,7 @@ export default function LandingPage() {
   const dispatch = useDispatch();
   const { jobs = [], loading } = useSelector((state) => state.job);
 
+// fetch jobs from backend
   useEffect(() => {
     dispatch(listJobs());
   }, [dispatch]);
@@ -542,7 +588,7 @@ export default function LandingPage() {
 
           {/* Scrolling image strips */}
           <div className="wl-img-strips">
-
+            {/* Row 1 — left to right */}
             <div className="wl-img-strip wl-strip-ltr">
               {[
                 "https://images.unsplash.com/photo-1591522811280-a8759970b03f?w=440&h=300&fit=crop",
@@ -551,6 +597,7 @@ export default function LandingPage() {
                 "https://images.unsplash.com/photo-1526178613552-2b45c6c302f0?w=440&h=300&fit=crop",
                 "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=440&h=300&fit=crop",
                 "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=440&h=300&fit=crop",
+                // duplicated for seamless loop
                 "https://images.unsplash.com/photo-1591522811280-a8759970b03f?w=440&h=300&fit=crop",
                 "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=440&h=300&fit=crop",
                 "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=440&h=300&fit=crop",
@@ -562,6 +609,7 @@ export default function LandingPage() {
               ))}
             </div>
 
+            {/* Row 2 — right to left */}
             <div className="wl-img-strip wl-strip-rtl">
               {[
                 "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=440&h=300&fit=crop",
@@ -581,6 +629,7 @@ export default function LandingPage() {
               ))}
             </div>
 
+            {/* Row 3 — left to right (slower) */}
             <div className="wl-img-strip wl-strip-ltr2">
               {[
                 "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=440&h=300&fit=crop",
@@ -601,6 +650,7 @@ export default function LandingPage() {
             </div>
           </div>
 
+          {/* Dark overlay for text legibility */}
           <div className="wl-img-overlay" />
 
           <div className="wl-grid-lines" />
@@ -643,6 +693,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── FLASH SALE BANNER ── */}
       <div className="wl-flash-banner">
         <div className="wl-flash-label">⚡ FLASH HIRING EVENT</div>
         <div className="wl-flash-msg">
@@ -660,6 +711,7 @@ export default function LandingPage() {
         </Link>
       </div>
 
+      {/* ── CATEGORIES ── */}
       <section id="categories" className="wl-section-pad">
         <div className="wl-container">
           <div className="wl-section-header">
@@ -679,6 +731,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── FEATURED JOBS ── */}
       <section className="wl-section-pad" style={{ paddingTop: 0 }}>
         <div className="wl-container">
           <div className="wl-section-header">
@@ -748,6 +801,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── TRENDING ── */}
       <section className="wl-section-pad" style={{ paddingTop: 0 }}>
         <div className="wl-container">
           <div className="wl-section-header">

@@ -1,6 +1,8 @@
 
 import React, { useState } from "react";
-import axiosClient from "../API/axiosClient";
+// import axiosClient from "../API/axiosClient";
+import { useDispatch,useSelector } from "react-redux";
+import { createJob } from "../store/slices/jobSlice";
 import {
   Briefcase, Users, CreditCard, AlertTriangle, BarChart3,
   CheckCircle, FileText, XCircle, Plus, Eye, MessageSquare,
@@ -189,6 +191,8 @@ export default function EmployerPlatform() {
   const [postData, setPostData]         = useState(getInitialPostData());
   const [postErrors, setPostErrors]     = useState({});
   const [submitState, setSubmitState]   = useState({ loading:false, error:null, success:null });
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.job);
 
   const pd = (field, val) => setPostData(p => ({ ...p, [field]: val }));
 
@@ -229,25 +233,75 @@ export default function EmployerPlatform() {
 
   const startNewJob = () => { setCurrentPage("postjob"); resetPostForm(); setSubmitState({loading:false,error:null,success:null}); };
 
+  // const publishJob = async () => {
+  //   if (!ensureStepsValid()) return;
+  //   const num = v => { const n=Number(v); return Number.isFinite(n)?n:undefined; };
+  //   const payload = {
+  //     title:postData.title.trim(), description:postData.description.trim(),
+  //     category:postData.category, employmentType:postData.type,
+  //     locationText:postData.location.trim(),
+  //     salaryMin:num(postData.salaryMin), salaryMax:num(postData.salaryMax),
+  //     payFrequency:postData.payFreq, skills:postData.skills, experienceLevel:postData.experience
+  //   };
+  //   setSubmitState({loading:true,error:null,success:null});
+  //   try {
+  //     const { data } = await axiosClient.post("/user/jobs", payload);
+  //     setSubmitState({loading:false,error:null,success:data?.message||"Job published successfully!"});
+  //     resetPostForm(); setCurrentPage("applicants");
+  //   } catch(err) {
+  //     setSubmitState({loading:false,error:err.response?.data?.message||"Failed to publish. Please try again.",success:null});
+  //   }
+  // };
+
+
   const publishJob = async () => {
-    if (!ensureStepsValid()) return;
-    const num = v => { const n=Number(v); return Number.isFinite(n)?n:undefined; };
-    const payload = {
-      title:postData.title.trim(), description:postData.description.trim(),
-      category:postData.category, employmentType:postData.type,
-      locationText:postData.location.trim(),
-      salaryMin:num(postData.salaryMin), salaryMax:num(postData.salaryMax),
-      payFrequency:postData.payFreq, skills:postData.skills, experienceLevel:postData.experience
-    };
-    setSubmitState({loading:true,error:null,success:null});
-    try {
-      const { data } = await axiosClient.post("/user/jobs", payload);
-      setSubmitState({loading:false,error:null,success:data?.message||"Job published successfully!"});
-      resetPostForm(); setCurrentPage("applicants");
-    } catch(err) {
-      setSubmitState({loading:false,error:err.response?.data?.message||"Failed to publish. Please try again.",success:null});
-    }
+  if (!ensureStepsValid()) return;
+
+  const payload = {
+    title: postData.title.trim(),
+    description: postData.description.trim(),
+    category: postData.category,
+    type: postData.type,
+    location: postData.location.trim(),
+    salaryMin: Number(postData.salaryMin),
+    salaryMax: Number(postData.salaryMax),
+    payFrequency: postData.payFreq,
+    skills: postData.skills,
+    experience: postData.experience,
   };
+
+  setSubmitState({ loading: true, error: null, success: null });
+
+  try {
+    const resultAction = await dispatch(createJob(payload));
+
+    if (createJob.fulfilled.match(resultAction)) {
+      setSubmitState({
+        loading: false,
+        error: null,
+        success: "Job posted successfully 🚀",
+      });
+
+      resetPostForm();
+      setCurrentPage("applicants");
+
+    } else {
+      setSubmitState({
+        loading: false,
+        error: resultAction.payload || "Failed to post job",
+        success: null,
+      });
+    }
+
+  } catch (err) {
+    setSubmitState({
+      loading: false,
+      error: "Something went wrong",
+      success: null,
+    });
+  }
+};
+
 
   const navItems = [
     { id:"postjob",    label:"Post Job",    icon:FileText,      neon:"var(--neon-green)" },

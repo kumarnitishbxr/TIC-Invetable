@@ -4,6 +4,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "http://localhost:5000";
 
+// ================= OVERVIEW =================
 export const getOverview = createAsyncThunk(
   "admin/overview",
   async (_, { rejectWithValue }) => {
@@ -16,6 +17,7 @@ export const getOverview = createAsyncThunk(
   }
 );
 
+// ================= USERS =================
 export const getUsers = createAsyncThunk(
   "admin/getUsers",
   async (_, { rejectWithValue }) => {
@@ -28,6 +30,7 @@ export const getUsers = createAsyncThunk(
   }
 );
 
+// ================= JOBS =================
 export const getJobs = createAsyncThunk(
   "admin/getJobs",
   async (_, { rejectWithValue }) => {
@@ -40,6 +43,7 @@ export const getJobs = createAsyncThunk(
   }
 );
 
+// ================= DISPUTES =================
 export const getDisputes = createAsyncThunk(
   "admin/getDisputes",
   async (_, { rejectWithValue }) => {
@@ -52,6 +56,7 @@ export const getDisputes = createAsyncThunk(
   }
 );
 
+// ================= BLOCK USER =================
 export const blockUser = createAsyncThunk(
   "admin/blockUser",
   async (userId, { rejectWithValue }) => {
@@ -64,6 +69,7 @@ export const blockUser = createAsyncThunk(
   }
 );
 
+// ================= UNBLOCK USER =================
 export const unblockUser = createAsyncThunk(
   "admin/unblockUser",
   async (userId, { rejectWithValue }) => {
@@ -76,6 +82,7 @@ export const unblockUser = createAsyncThunk(
   }
 );
 
+// ================= DELETE USER =================
 export const deleteUser = createAsyncThunk(
   "admin/deleteUser",
   async (userId, { rejectWithValue }) => {
@@ -88,6 +95,7 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
+// ================= DELETE JOB =================
 export const deleteJob = createAsyncThunk(
   "admin/deleteJob",
   async (jobId, { rejectWithValue }) => {
@@ -100,6 +108,7 @@ export const deleteJob = createAsyncThunk(
   }
 );
 
+// ================= RESOLVE DISPUTE =================
 export const resolveDispute = createAsyncThunk(
   "admin/resolveDispute",
   async ({ disputeId, resolutionNotes }, { rejectWithValue }) => {
@@ -114,6 +123,7 @@ export const resolveDispute = createAsyncThunk(
   }
 );
 
+// ================= SLICE =================
 const adminSlice = createSlice({
   name: "admin",
   initialState: {
@@ -130,6 +140,7 @@ const adminSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
+      // ===== OVERVIEW =====
       .addCase(getOverview.pending, (state) => {
         state.loading = true;
       })
@@ -142,36 +153,44 @@ const adminSlice = createSlice({
         state.error = action.payload;
       })
 
+      // ===== USERS =====
       .addCase(getUsers.fulfilled, (state, action) => {
         state.users = action.payload;
       })
 
+      // ===== JOBS =====
       .addCase(getJobs.fulfilled, (state, action) => {
         state.jobs = action.payload;
       })
 
+      // ===== DISPUTES =====
       .addCase(getDisputes.fulfilled, (state, action) => {
         state.disputes = action.payload;
       })
 
+      // ===== BLOCK USER =====
       .addCase(blockUser.fulfilled, (state, action) => {
         const user = state.users.find(u => u._id === action.payload);
         if (user) user.isBlocked = true;
       })
 
+      // ===== UNBLOCK USER =====
       .addCase(unblockUser.fulfilled, (state, action) => {
         const user = state.users.find(u => u._id === action.payload);
         if (user) user.isBlocked = false;
       })
 
+      // ===== DELETE USER =====
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.users = state.users.filter(u => u._id !== action.payload);
       })
 
+      // ===== DELETE JOB =====
       .addCase(deleteJob.fulfilled, (state, action) => {
         state.jobs = state.jobs.filter(j => j._id !== action.payload);
       })
 
+      // ===== RESOLVE DISPUTE =====
       .addCase(resolveDispute.fulfilled, (state, action) => {
         const index = state.disputes.findIndex(
           d => d._id === action.payload._id

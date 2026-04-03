@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Bell, Search, ChevronDown } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { logoutUser } from "../../store/slices/authSlices";
+import { logoutUser } from "../../store/slices/authSlice";
 
 export default function AppHeader({ user = {}, onSearch = () => {} }) {
   const [profileOpen, setProfileOpen] = useState(false);
