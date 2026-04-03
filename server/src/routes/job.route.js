@@ -1,6 +1,6 @@
 import {Router} from "express";
 import { createJob } from "../controllers/job.controller.js";
-import authenticateEmployer from "../middlewares/employer.middleware.js";
+import authenticateEmployer from "../middleware/employer.middleware.js";
 
 
 const jobRouter = Router();

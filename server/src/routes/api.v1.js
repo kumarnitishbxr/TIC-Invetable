@@ -1,10 +1,11 @@
 import {Router} from "express";
 import jobRouter from "./job.route.js";
-// import 
+import authRouter from "./auth.route.js";
 
 
 const router = Router();
 
+router.use("/auth", authRouter);
 router.use('/job', jobRouter);
 
 

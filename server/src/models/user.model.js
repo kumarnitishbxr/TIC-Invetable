@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     contact: {
         type: Number,
         required: true,
-        minLength: [10, "phone number must be 10 digits long"],
+        minLength: 10,
         unique: true
     },
     emailId: {
@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
     },
     rating:{
         type: Number,
-        default: [0, "rating must be between 0 to 10"]
+        default: 0
     },
     ratingCount: {
         type: Number,

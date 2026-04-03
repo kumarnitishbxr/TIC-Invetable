@@ -1,6 +1,6 @@
-// import { validate } from '../Utils/Validate.js'
+import { validate } from '../Utils/Validate.js'
 import jwt from 'jsonwebtoken'
-import User from '../Models/User.js'
+import User from '../models/user.model.js'
 import bcrypt from 'bcrypt';
 // import redisClient from '../config/Redis.js';
 
@@ -22,10 +22,10 @@ export const Register = async (req, res) => {
             message: "User already exists."
         })
 
-        // const result = validate(req.body);
-        // if(!result.success) return res.status(500).json({
-        //     message: result.message
-        // })
+        const result = validate(req.body);
+        if(!result.success) return res.status(500).json({
+            message: result.message
+        })
 
         req.body.password = await bcrypt.hash(password, 12);
 
@@ -39,6 +39,7 @@ export const Register = async (req, res) => {
         {expiresIn: process.env.JWT_EXP})
 
         res.status(201).json({
+            Token,
             success: true,
             message: 'User registered successfully',
             userId: user._id,
@@ -66,7 +67,7 @@ export const Login = async (req, res) => {
             message: 'Email and password are required' 
          });
       }
-      // console.log(emailId, password)
+      console.log(emailId, password)
 
       const user = await User.findOne({ emailId });
       if (!user) {
@@ -95,9 +96,10 @@ export const Login = async (req, res) => {
          { expiresIn: process.env.JWT_EXP }
       );
 
-      res.cookie('Token', Token, cookieOptions);
+      res.cookie('Token', Token);
 
       res.status(201).json({
+         Token,
          success: true,
          message: 'User logged in successfully',
          userId: user._id,
