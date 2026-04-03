@@ -13,6 +13,10 @@ app.use(cors({
    credentials: true
 }))
 
+app.get("/", (req, res) => {
+   res.json({connection: "OK"});
+})
+
 app.use('/api', router);
 
 export default app;
