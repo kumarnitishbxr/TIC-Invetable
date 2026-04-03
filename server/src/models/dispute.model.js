@@ -1,29 +1,49 @@
-import mongoose from 'mongoose';
-import User from './user.model';
+import mongoose from "mongoose";
 
-const disputeSchema = new mongoose.Schema({
-    job: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Job'
+const disputeSchema = new mongoose.Schema(
+    {
+        job: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Job",
+            required: true,
+        },
+        raisedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        mediator: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+        againstWorker: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+        issue: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        resolutionNotes: {
+            type: String,
+            default: "",
+            trim: true,
+        },
+        status: {
+            type: String,
+            enum: ["pending", "in-progress", "resolved"],
+            default: "pending",
+        },
+        evidenceUrls: {
+            type: [String],
+            default: [],
+        },
+        resolvedAt: Date,
     },
-    raisedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    mediator: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    issue: String,
-    status: {
-        type: String,
-        enum: ['pending', 'in-progress', 'resolved'],
-        default: 'pending'
-    },
-    resolutionNotes: String
-}, {timestamps: true});
+    { timestamps: true },
+);
 
-const Dispute = mongoose.model('Dispute', disputeSchema);
-
+const Dispute = mongoose.model("Dispute", disputeSchema);
 
 export default Dispute;

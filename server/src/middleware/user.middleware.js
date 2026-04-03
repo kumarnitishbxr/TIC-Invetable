@@ -34,4 +34,4 @@ const authenticateUser = async (req, res, next)=>{
 }
 
 
-export default authenticateUser
+export default authenticateUser;
