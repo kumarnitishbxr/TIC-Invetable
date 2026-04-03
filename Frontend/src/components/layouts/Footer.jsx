@@ -54,21 +54,20 @@ const globalCSS = `/* Only footer-related styles (keep global CSS separate ideal
 .wl-footer-copy {
   font-size: 12px;
   color: #6b7a99;
-}`
+}`;
 
 const Footer = () => {
   useEffect(() => {
-  const style = document.createElement("style");
-  style.innerHTML = globalCSS;
-  document.head.appendChild(style);
-}, []);
+    const style = document.createElement("style");
+    style.innerHTML = globalCSS;
+    document.head.appendChild(style);
+  }, []);
   return (
     <footer className="wl-footer">
       <div className="wl-footer-inner">
-
         {/* Logo + Tagline */}
         <div>
-          <span className="wl-footer-logo">WorkLink ⚡</span>
+          <span className="wl-footer-logo">Karigar ⚡</span>
           <span className="wl-footer-tagline">
             Empowering rural workers across India
           </span>
@@ -85,9 +84,8 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="wl-footer-copy">
-          © 2026 WorkLink. All rights reserved.
+          © 2026 Karigar. All rights reserved.
         </div>
-
       </div>
     </footer>
   );

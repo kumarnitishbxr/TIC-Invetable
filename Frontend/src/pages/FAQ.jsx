@@ -1,6 +1,5 @@
 // import React, { useState, useMemo } from 'react';
 
-
 // export default function FAQ() {
 //   const [query, setQuery] = useState('');
 //   const [category, setCategory] = useState('all');
@@ -13,7 +12,7 @@
 // //   const faqs = [
 // //     {
 // //       id: 'f1',
-// //       q: 'How do I create a worker profile on KaamSetu?',
+// //       q: 'How do I create a worker profile on Karigar?',
 // //       a: 'Go to Profile > Edit and fill in your personal details, skills, experience and preferred work locations. Verify your phone number to activate your profile.',
 // //       category: 'workers'
 // //     },
@@ -26,7 +25,7 @@
 // //     {
 // //       id: 'f3',
 // //       q: 'What payment methods are supported?',
-// //       a: 'KaamSetu supports bank transfers and UPI. For escrow-protected jobs, funds are held until milestone completion or dispute resolution.',
+// //       a: 'Karigar supports bank transfers and UPI. For escrow-protected jobs, funds are held until milestone completion or dispute resolution.',
 // //       category: 'payments'
 // //     },
 // //     {
@@ -64,7 +63,7 @@
 // const faqs = useMemo(() => [
 //   {
 //     id: 'f1',
-//     q: 'How do I create a worker profile on KaamSetu?',
+//     q: 'How do I create a worker profile on Karigar?',
 //     a: 'Go to the signup page, enter your details and choose your role as worker.',
 //     category: 'workers'
 //   },
@@ -82,7 +81,6 @@
 //   },
 //   // Add all your remaining FAQs here...
 // ], []);
-
 
 //   const categories = [
 //     { id: 'all', label: 'All' },
@@ -125,7 +123,7 @@
 //         <div className="bg-white rounded-lg shadow p-6 mb-6">
 //           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 //             <div>
-//               <h1 className="text-2xl font-bold">Help & FAQs — KaamSetu</h1>
+//               <h1 className="text-2xl font-bold">Help & FAQs — Karigar</h1>
 //               <p className="text-sm text-gray-600 mt-1">Find answers, contact support, or report issues quickly.</p>
 //             </div>
 
@@ -174,7 +172,7 @@
 //                     <div className="text-gray-400">{openId === f.id ? '−' : '+'}</div>
 //                   </button>
 
-//                   <div id={`panel-${f.id}`} className={`${openId === f.id ? 'block' : 'hidden'} mt-3 text-gray-700 pl-2`}> 
+//                   <div id={`panel-${f.id}`} className={`${openId === f.id ? 'block' : 'hidden'} mt-3 text-gray-700 pl-2`}>
 //                     {f.a}
 //                   </div>
 //                 </div>
@@ -263,79 +261,103 @@
 //           </div>
 //         )}
 
-//         <div className="mt-8 text-center text-xs text-gray-500">© {new Date().getFullYear()} KaamSetu — Help & Support</div>
+//         <div className="mt-8 text-center text-xs text-gray-500">© {new Date().getFullYear()} Karigar — Help & Support</div>
 //       </div>
 //     </div>
 //   );
 // }
 
-
-
-
-import React, { useState, useMemo } from 'react';
-import {Link} from 'react-router-dom'
-import { Search, Filter, AlertCircle, Phone, Mail, MessageSquare, ChevronDown, ChevronUp, X, Send, HelpCircle, Shield, Zap } from 'lucide-react';
+import React, { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
+import {
+  Search,
+  Filter,
+  AlertCircle,
+  Phone,
+  Mail,
+  MessageSquare,
+  ChevronDown,
+  ChevronUp,
+  X,
+  Send,
+  HelpCircle,
+  Shield,
+  Zap,
+} from "lucide-react";
 
 export default function FAQ() {
-  const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('all');
+  const [query, setQuery] = useState("");
+  const [category, setCategory] = useState("all");
   const [openId, setOpenId] = useState(null);
   const [showReport, setShowReport] = useState(false);
-  const [reportData, setReportData] = useState({ name: '', phone: '', email: '', issue: '', details: '' });
-  const [contact, setContact] = useState({ name: '', email: '', message: '' });
-  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [reportData, setReportData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    issue: "",
+    details: "",
+  });
+  const [contact, setContact] = useState({ name: "", email: "", message: "" });
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
-  const faqs = useMemo(() => [
-    {
-      id: 'f1',
-      q: 'How do I create a worker profile on KaamSetu?',
-      a: 'Go to the signup page, enter your details and choose your role as worker.',
-      category: 'workers'
-    },
-    {
-      id: 'f2',
-      q: 'How do employers post jobs?',
-      a: 'Once logged in, employers can go to Dashboard → Post Job and fill the required details.',
-      category: 'employers'
-    },
-    {
-      id: 'f3',
-      q: 'How can I contact support?',
-      a: 'You can use the help form at the bottom of this page to raise a ticket.',
-      category: 'general'
-    },
-    {
-      id: 'f4',
-      q: 'What payment methods are supported?',
-      a: 'KaamSetu supports bank transfers and UPI. For escrow-protected jobs, funds are held until milestone completion or dispute resolution.',
-      category: 'payments'
-    },
-    {
-      id: 'f5',
-      q: 'How does dispute mediation work?',
-      a: 'Raise a dispute from My Work or Applicant dashboard with evidence. Our mediation team reviews within 24-48 hours and suggests a fair resolution.',
-      category: 'disputes'
-    },
-    {
-      id: 'f6',
-      q: 'How is worker verification handled?',
-      a: 'Verification may include phone OTP, ID document upload, and employer endorsements. Verified badges improve job visibility.',
-      category: 'general'
-    },
-  ], []);
+  const faqs = useMemo(
+    () => [
+      {
+        id: "f1",
+        q: "How do I create a worker profile on Karigar?",
+        a: "Go to the signup page, enter your details and choose your role as worker.",
+        category: "workers",
+      },
+      {
+        id: "f2",
+        q: "How do employers post jobs?",
+        a: "Once logged in, employers can go to Dashboard → Post Job and fill the required details.",
+        category: "employers",
+      },
+      {
+        id: "f3",
+        q: "How can I contact support?",
+        a: "You can use the help form at the bottom of this page to raise a ticket.",
+        category: "general",
+      },
+      {
+        id: "f4",
+        q: "What payment methods are supported?",
+        a: "Karigar supports bank transfers and UPI. For escrow-protected jobs, funds are held until milestone completion or dispute resolution.",
+        category: "payments",
+      },
+      {
+        id: "f5",
+        q: "How does dispute mediation work?",
+        a: "Raise a dispute from My Work or Applicant dashboard with evidence. Our mediation team reviews within 24-48 hours and suggests a fair resolution.",
+        category: "disputes",
+      },
+      {
+        id: "f6",
+        q: "How is worker verification handled?",
+        a: "Verification may include phone OTP, ID document upload, and employer endorsements. Verified badges improve job visibility.",
+        category: "general",
+      },
+    ],
+    [],
+  );
 
   const categories = [
-    { id: 'all', label: 'All' },
-    { id: 'general', label: 'General' },
-    { id: 'workers', label: 'Workers' },
-    { id: 'employers', label: 'Employers' },
-    { id: 'payments', label: 'Payments' },
-    { id: 'disputes', label: 'Disputes' }
+    { id: "all", label: "All" },
+    { id: "general", label: "General" },
+    { id: "workers", label: "Workers" },
+    { id: "employers", label: "Employers" },
+    { id: "payments", label: "Payments" },
+    { id: "disputes", label: "Disputes" },
   ];
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return faqs.filter(f => (category === 'all' || f.category === category) && (!q || (f.q + ' ' + f.a).toLowerCase().includes(q)));
+    return faqs.filter(
+      (f) =>
+        (category === "all" || f.category === category) &&
+        (!q || (f.q + " " + f.a).toLowerCase().includes(q)),
+    );
   }, [faqs, query, category]);
 
   function toggleOpen(id) {
@@ -344,17 +366,19 @@ export default function FAQ() {
 
   function submitContact(e) {
     e.preventDefault();
-    setFeedbackMessage('Thank you! Our support team will contact you shortly.');
-    setContact({ name: '', email: '', message: '' });
-    setTimeout(() => setFeedbackMessage(''), 5000);
+    setFeedbackMessage("Thank you! Our support team will contact you shortly.");
+    setContact({ name: "", email: "", message: "" });
+    setTimeout(() => setFeedbackMessage(""), 5000);
   }
 
   function submitReport(e) {
     e.preventDefault();
-    setFeedbackMessage('Report submitted. Our mediation team will review the issue.');
-    setReportData({ name: '', phone: '', email: '', issue: '', details: '' });
+    setFeedbackMessage(
+      "Report submitted. Our mediation team will review the issue.",
+    );
+    setReportData({ name: "", phone: "", email: "", issue: "", details: "" });
     setShowReport(false);
-    setTimeout(() => setFeedbackMessage(''), 5000);
+    setTimeout(() => setFeedbackMessage(""), 5000);
   }
 
   return (
@@ -397,7 +421,11 @@ export default function FAQ() {
               onChange={(e) => setCategory(e.target.value)}
               className="px-4 py-3.5 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-bold text-slate-700"
             >
-              {categories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.label}
+                </option>
+              ))}
             </select>
 
             <button
@@ -418,12 +446,17 @@ export default function FAQ() {
                   <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
                     <Search className="w-8 h-8 text-slate-400" />
                   </div>
-                  <p className="text-slate-600 font-medium">No results — try a different keyword or category.</p>
+                  <p className="text-slate-600 font-medium">
+                    No results — try a different keyword or category.
+                  </p>
                 </div>
               )}
 
               {filtered.map((f, idx) => (
-                <div key={f.id} className={`${idx !== 0 ? 'border-t border-slate-200' : ''}`}>
+                <div
+                  key={f.id}
+                  className={`${idx !== 0 ? "border-t border-slate-200" : ""}`}
+                >
                   <button
                     onClick={() => toggleOpen(f.id)}
                     className="w-full text-left p-6 hover:bg-slate-50 transition-colors"
@@ -431,13 +464,19 @@ export default function FAQ() {
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
-                        <h3 className="text-lg font-black text-slate-900 mb-2">{f.q}</h3>
+                        <h3 className="text-lg font-black text-slate-900 mb-2">
+                          {f.q}
+                        </h3>
                         <div className="inline-flex items-center px-3 py-1 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 text-xs font-bold uppercase tracking-wider">
                           {f.category}
                         </div>
                       </div>
                       <div className="shrink-0 w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center text-slate-600">
-                        {openId === f.id ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                        {openId === f.id ? (
+                          <ChevronUp className="w-5 h-5" />
+                        ) : (
+                          <ChevronDown className="w-5 h-5" />
+                        )}
                       </div>
                     </div>
                   </button>
@@ -461,7 +500,10 @@ export default function FAQ() {
               >
                 Report a Payment Issue
               </button>
-              <Link to="/contactpage" className="p-6 text-center rounded-3xl bg-linear-to-r from-emerald-500 to-teal-500 text-white font-bold shadow-lg hover:shadow-xl hover:from-emerald-600 hover:to-teal-600 transition-all">
+              <Link
+                to="/contactpage"
+                className="p-6 text-center rounded-3xl bg-linear-to-r from-emerald-500 to-teal-500 text-white font-bold shadow-lg hover:shadow-xl hover:from-emerald-600 hover:to-teal-600 transition-all"
+              >
                 Contact Support
               </Link>
             </div>
@@ -475,15 +517,25 @@ export default function FAQ() {
                 <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg">
                   <Phone className="w-5 h-5 text-white" />
                 </div>
-                <h4 className="text-lg font-black text-slate-900">Quick Help</h4>
+                <h4 className="text-lg font-black text-slate-900">
+                  Quick Help
+                </h4>
               </div>
-              
-              <p className="text-sm text-slate-600 mb-4">If you need immediate assistance, call our helpline:</p>
+
+              <p className="text-sm text-slate-600 mb-4">
+                If you need immediate assistance, call our helpline:
+              </p>
 
               <div className="p-4 rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 border border-emerald-200">
-                <div className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">Helpline (India)</div>
-                <div className="text-xl font-black text-slate-900 mb-1">1800-XXX-XXXX</div>
-                <div className="text-xs text-slate-600 font-semibold">Mon–Sat 8:00–20:00</div>
+                <div className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-1">
+                  Helpline (India)
+                </div>
+                <div className="text-xl font-black text-slate-900 mb-1">
+                  1800-XXX-XXXX
+                </div>
+                <div className="text-xs text-slate-600 font-semibold">
+                  Mon–Sat 8:00–20:00
+                </div>
               </div>
             </div>
 
@@ -493,14 +545,18 @@ export default function FAQ() {
                 <div className="w-10 h-10 rounded-xl bg-linear-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg">
                   <MessageSquare className="w-5 h-5 text-white" />
                 </div>
-                <h4 className="text-lg font-black text-slate-900">Contact Support</h4>
+                <h4 className="text-lg font-black text-slate-900">
+                  Contact Support
+                </h4>
               </div>
 
               <div className="space-y-3">
                 <input
                   required
                   value={contact.name}
-                  onChange={(e) => setContact(c => ({ ...c, name: e.target.value }))}
+                  onChange={(e) =>
+                    setContact((c) => ({ ...c, name: e.target.value }))
+                  }
                   placeholder="Your name"
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium"
                 />
@@ -508,14 +564,18 @@ export default function FAQ() {
                   required
                   type="email"
                   value={contact.email}
-                  onChange={(e) => setContact(c => ({ ...c, email: e.target.value }))}
+                  onChange={(e) =>
+                    setContact((c) => ({ ...c, email: e.target.value }))
+                  }
                   placeholder="Email"
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium"
                 />
                 <textarea
                   required
                   value={contact.message}
-                  onChange={(e) => setContact(c => ({ ...c, message: e.target.value }))}
+                  onChange={(e) =>
+                    setContact((c) => ({ ...c, message: e.target.value }))
+                  }
                   placeholder="Brief message"
                   rows={4}
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium resize-none"
@@ -530,29 +590,42 @@ export default function FAQ() {
 
               {feedbackMessage && (
                 <div className="mt-4 p-3 rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 border border-emerald-200">
-                  <p className="text-sm text-emerald-700 font-semibold">{feedbackMessage}</p>
+                  <p className="text-sm text-emerald-700 font-semibold">
+                    {feedbackMessage}
+                  </p>
                 </div>
               )}
             </div>
 
             {/* Popular Topics */}
             <div className="bg-linear-to-br from-white to-slate-50 rounded-3xl shadow-xl border border-slate-200 p-6">
-              <h5 className="text-lg font-black text-slate-900 mb-4">Popular Topics</h5>
+              <h5 className="text-lg font-black text-slate-900 mb-4">
+                Popular Topics
+              </h5>
               <div className="space-y-2">
                 <button
-                  onClick={() => { setCategory('workers'); setQuery(''); }}
+                  onClick={() => {
+                    setCategory("workers");
+                    setQuery("");
+                  }}
                   className="w-full text-left p-3 rounded-2xl hover:bg-linear-to-r hover:from-emerald-50 hover:to-teal-50 text-emerald-600 font-bold transition-all border border-transparent hover:border-emerald-200"
                 >
                   How to create a worker profile
                 </button>
                 <button
-                  onClick={() => { setCategory('payments'); setQuery(''); }}
+                  onClick={() => {
+                    setCategory("payments");
+                    setQuery("");
+                  }}
                   className="w-full text-left p-3 rounded-2xl hover:bg-linear-to-r hover:from-emerald-50 hover:to-teal-50 text-emerald-600 font-bold transition-all border border-transparent hover:border-emerald-200"
                 >
                   Payment & Escrow questions
                 </button>
                 <button
-                  onClick={() => { setCategory('disputes'); setQuery(''); }}
+                  onClick={() => {
+                    setCategory("disputes");
+                    setQuery("");
+                  }}
                   className="w-full text-left p-3 rounded-2xl hover:bg-linear-to-r hover:from-emerald-50 hover:to-teal-50 text-emerald-600 font-bold transition-all border border-transparent hover:border-emerald-200"
                 >
                   Raise a dispute
@@ -565,14 +638,19 @@ export default function FAQ() {
         {/* Report Issue Modal */}
         {showReport && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={() => setShowReport(false)} />
+            <div
+              className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
+              onClick={() => setShowReport(false)}
+            />
             <div className="relative bg-linear-to-br from-white to-slate-50 rounded-3xl shadow-2xl border border-slate-200 max-w-2xl w-full p-8 z-60">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-rose-500 to-pink-500 flex items-center justify-center shadow-lg">
                     <AlertCircle className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-2xl font-black text-slate-900">Report an Issue</h3>
+                  <h3 className="text-2xl font-black text-slate-900">
+                    Report an Issue
+                  </h3>
                 </div>
                 <button
                   onClick={() => setShowReport(false)}
@@ -587,14 +665,18 @@ export default function FAQ() {
                   <input
                     required
                     value={reportData.name}
-                    onChange={(e) => setReportData(d => ({ ...d, name: e.target.value }))}
+                    onChange={(e) =>
+                      setReportData((d) => ({ ...d, name: e.target.value }))
+                    }
                     placeholder="Your name"
                     className="px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium"
                   />
                   <input
                     required
                     value={reportData.phone}
-                    onChange={(e) => setReportData(d => ({ ...d, phone: e.target.value }))}
+                    onChange={(e) =>
+                      setReportData((d) => ({ ...d, phone: e.target.value }))
+                    }
                     placeholder="Phone"
                     className="px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium"
                   />
@@ -604,7 +686,9 @@ export default function FAQ() {
                   required
                   type="email"
                   value={reportData.email}
-                  onChange={(e) => setReportData(d => ({ ...d, email: e.target.value }))}
+                  onChange={(e) =>
+                    setReportData((d) => ({ ...d, email: e.target.value }))
+                  }
                   placeholder="Email (optional)"
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium"
                 />
@@ -612,7 +696,9 @@ export default function FAQ() {
                 <select
                   required
                   value={reportData.issue}
-                  onChange={(e) => setReportData(d => ({ ...d, issue: e.target.value }))}
+                  onChange={(e) =>
+                    setReportData((d) => ({ ...d, issue: e.target.value }))
+                  }
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-bold text-slate-700"
                 >
                   <option value="">Select issue type</option>
@@ -625,7 +711,9 @@ export default function FAQ() {
                 <textarea
                   required
                   value={reportData.details}
-                  onChange={(e) => setReportData(d => ({ ...d, details: e.target.value }))}
+                  onChange={(e) =>
+                    setReportData((d) => ({ ...d, details: e.target.value }))
+                  }
                   rows={5}
                   placeholder="Describe the issue, include job id or screenshots link if any"
                   className="w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium resize-none"
@@ -653,7 +741,7 @@ export default function FAQ() {
 
         {/* Footer */}
         <div className="mt-12 text-center text-sm text-slate-500 font-medium">
-          © {new Date().getFullYear()} KaamSetu — Help & Support
+          © {new Date().getFullYear()} Karigar — Help & Support
         </div>
       </div>
     </div>

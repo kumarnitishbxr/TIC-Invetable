@@ -297,10 +297,6 @@
 //   );
 // }
 
-
-
-
-
 // import React, { useEffect, useMemo, useRef, useState } from "react";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
@@ -550,7 +546,7 @@
 //         <div className="flex items-center justify-between mb-6">
 //           <div>
 //             <h1 className="text-2xl font-semibold">My Profile</h1>
-//             <p className="text-sm text-gray-600">Manage your KaamSetu account details</p>
+//             <p className="text-sm text-gray-600">Manage your Karigar account details</p>
 //           </div>
 
 //           <div className="flex items-center gap-3">
@@ -845,16 +841,6 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
 // import React, { useEffect, useMemo, useRef, useState } from "react";
 // import axios from "axios";
 // import { useNavigate } from "react-router-dom";
@@ -1085,7 +1071,7 @@
 //             <h1 className="text-4xl font-black bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-2">
 //               My Profile
 //             </h1>
-//             <p className="text-slate-600 font-medium">Manage your KaamSetu account details</p>
+//             <p className="text-slate-600 font-medium">Manage your Karigar account details</p>
 //           </div>
 
 //           <div className="flex flex-wrap items-center gap-3">
@@ -1404,20 +1390,25 @@
 //   );
 // }
 
-
-
-
-
-
-
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { User, MapPin, Phone, Edit2, Check, X, Upload, Star, ShieldCheck, AlertCircle, LogOut, Briefcase, FileText } from "lucide-react";
+import {
+  User,
+  MapPin,
+  Phone,
+  Edit2,
+  Check,
+  X,
+  Upload,
+  Star,
+  ShieldCheck,
+  AlertCircle,
+  LogOut,
+  Briefcase,
+  FileText,
+} from "lucide-react";
 import axiosClient from "../API/axiosClient";
 import { useSelector } from "react-redux";
-
-
-
 
 const AVAILABLE_SKILLS = [
   "Construction",
@@ -1429,13 +1420,13 @@ const AVAILABLE_SKILLS = [
   "Warehouse",
   "Cleaning",
   "Welding",
-  "Masonry"
+  "Masonry",
 ];
 
 export default function Profile() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  const { user } = useSelector(state => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -1459,11 +1450,11 @@ export default function Profile() {
     location: user?.location || { type: "Point", coordinates: [0, 0] },
     avatarUrl: user?.avatarUrl || "",
     activeCases: user?.activeCases ?? 0,
-    createdAt: user?.createdAt || null
+    createdAt: user?.createdAt || null,
   }));
 
   useEffect(() => {
-    setProfile(prev => ({
+    setProfile((prev) => ({
       ...prev,
       _id: user?._id || "",
       firstName: user?.firstName || "",
@@ -1476,23 +1467,20 @@ export default function Profile() {
       rating: user?.rating ?? prev.rating ?? 0,
       ratingCount: user?.ratingCount ?? prev.ratingCount ?? 0,
       isBlocked: Boolean(user?.isBlocked),
-      location: user?.location || prev.location || { type: "Point", coordinates: [0, 0] },
+      location: user?.location ||
+        prev.location || { type: "Point", coordinates: [0, 0] },
       avatarUrl: user?.avatarUrl || prev.avatarUrl || "",
       activeCases: user?.activeCases ?? prev.activeCases ?? 0,
-      createdAt: user?.createdAt || prev.createdAt || null
+      createdAt: user?.createdAt || prev.createdAt || null,
     }));
   }, [user]);
-
-  
-
-  
 
   const toggleSkill = (skill) => {
     setProfile((prev) => ({
       ...prev,
       skills: prev.skills.includes(skill)
         ? prev.skills.filter((s) => s !== skill)
-        : [...prev.skills, skill]
+        : [...prev.skills, skill],
     }));
   };
 
@@ -1509,9 +1497,12 @@ export default function Profile() {
       const form = new FormData();
       form.append("avatar", file);
       const { data } = await axiosClient.post("/user/avatar", form, {
-        headers: { "Content-Type": "multipart/form-data" }
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      setProfile(prev => ({ ...prev, avatarUrl: data?.avatarUrl || prev.avatarUrl }));
+      setProfile((prev) => ({
+        ...prev,
+        avatarUrl: data?.avatarUrl || prev.avatarUrl,
+      }));
       setSuccessMsg("Avatar uploaded");
       setTimeout(() => setSuccessMsg(""), 2500);
     } catch (err) {
@@ -1534,7 +1525,7 @@ export default function Profile() {
         const { longitude, latitude } = pos.coords;
         setProfile((prev) => ({
           ...prev,
-          location: { type: "Point", coordinates: [longitude, latitude] }
+          location: { type: "Point", coordinates: [longitude, latitude] },
         }));
         setSuccessMsg("Location set from device.");
         setTimeout(() => setSuccessMsg(""), 2500);
@@ -1543,7 +1534,7 @@ export default function Profile() {
         console.error("Geo error:", err);
         setError("Unable to get location. Please allow location access.");
       },
-      { enableHighAccuracy: true, timeout: 10000 }
+      { enableHighAccuracy: true, timeout: 10000 },
     );
   };
 
@@ -1561,7 +1552,7 @@ export default function Profile() {
       contact: contactValue || undefined,
       aadhar: aadharValue || undefined,
       skills: profile.skills,
-      location: profile.location
+      location: profile.location,
     };
 
     Object.keys(payload).forEach((key) => {
@@ -1575,32 +1566,42 @@ export default function Profile() {
     });
 
     try {
-      const { data } = await axiosClient.patch('/user/update', payload);
+      const { data } = await axiosClient.patch("/user/update", payload);
       const updated = data?.data || data?.user || {};
-      setProfile(prev => ({
+      setProfile((prev) => ({
         ...prev,
         ...payload,
-        ...(
-          updated && typeof updated === "object"
-            ? {
-                firstName: updated.firstName ?? prev.firstName,
-                contact: updated.contact !== undefined ? String(updated.contact) : prev.contact,
-                aadhar: updated.aadhar !== undefined ? String(updated.aadhar) : prev.aadhar,
-                skills: Array.isArray(updated.skills) ? updated.skills : prev.skills,
-                location: updated.location || prev.location,
-                verified: updated.verified ?? prev.verified,
-                rating: updated.rating ?? prev.rating,
-                ratingCount: updated.ratingCount ?? prev.ratingCount,
-                isBlocked: updated.isBlocked ?? prev.isBlocked
-              }
-            : {}
-        )
+        ...(updated && typeof updated === "object"
+          ? {
+              firstName: updated.firstName ?? prev.firstName,
+              contact:
+                updated.contact !== undefined
+                  ? String(updated.contact)
+                  : prev.contact,
+              aadhar:
+                updated.aadhar !== undefined
+                  ? String(updated.aadhar)
+                  : prev.aadhar,
+              skills: Array.isArray(updated.skills)
+                ? updated.skills
+                : prev.skills,
+              location: updated.location || prev.location,
+              verified: updated.verified ?? prev.verified,
+              rating: updated.rating ?? prev.rating,
+              ratingCount: updated.ratingCount ?? prev.ratingCount,
+              isBlocked: updated.isBlocked ?? prev.isBlocked,
+            }
+          : {}),
       }));
       setSuccessMsg(data?.message || "Profile updated successfully.");
       setEditing(false);
     } catch (error) {
       console.error("Profile update error:", error);
-      setError(error?.response?.data?.message || error?.message || "Failed to update profile.");
+      setError(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to update profile.",
+      );
     } finally {
       setSaving(false);
       setTimeout(() => setSuccessMsg(""), 3000);
@@ -1610,7 +1611,7 @@ export default function Profile() {
   const handleLogout = async () => {
     try {
       setLoading(true);
-      await axiosClient.get('/auth/logout');
+      await axiosClient.get("/auth/logout");
       navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);
@@ -1645,7 +1646,7 @@ export default function Profile() {
     location,
     avatarUrl,
     activeCases,
-    createdAt
+    createdAt,
   } = profile;
 
   return (
@@ -1663,7 +1664,9 @@ export default function Profile() {
             <h1 className="text-4xl font-black bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent mb-2">
               My Profile
             </h1>
-            <p className="text-slate-600 font-medium">Manage your KaamSetu account details</p>
+            <p className="text-slate-600 font-medium">
+              Manage your Karigar account details
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
@@ -1710,7 +1713,11 @@ export default function Profile() {
               <div className="relative">
                 <div className="w-32 h-32 rounded-3xl overflow-hidden bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-2xl border-4 border-white/30">
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
+                    <img
+                      src={avatarUrl}
+                      alt="avatar"
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <User className="w-16 h-16 text-white/70" />
                   )}
@@ -1728,18 +1735,32 @@ export default function Profile() {
                     <Upload className="w-5 h-5" />
                   )}
                 </button>
-                <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleAvatarChange}
+                />
               </div>
 
               <div className="flex-1 text-white">
-                <h2 className="text-3xl font-black mb-2">{firstName || "Your name"}</h2>
-                <div className="text-emerald-100 font-medium mb-4">{emailId || "No email"}</div>
+                <h2 className="text-3xl font-black mb-2">
+                  {firstName || "Your name"}
+                </h2>
+                <div className="text-emerald-100 font-medium mb-4">
+                  {emailId || "No email"}
+                </div>
 
                 <div className="flex flex-wrap gap-4">
                   <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/20 backdrop-blur-sm">
                     <Star className="w-5 h-5 text-amber-300 fill-amber-300" />
-                    <span className="font-bold">{rating?.toFixed?.(1) ?? 0}</span>
-                    <span className="text-sm text-white/80">({ratingCount ?? 0})</span>
+                    <span className="font-bold">
+                      {rating?.toFixed?.(1) ?? 0}
+                    </span>
+                    <span className="text-sm text-white/80">
+                      ({ratingCount ?? 0})
+                    </span>
                   </div>
 
                   <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/20 backdrop-blur-sm">
@@ -1751,9 +1772,11 @@ export default function Profile() {
                     </span>
                   </div>
 
-                  <div className={`px-4 py-2 rounded-xl font-bold uppercase text-sm ${
-                    isBlocked ? "bg-rose-500" : "bg-white/20 backdrop-blur-sm"
-                  }`}>
+                  <div
+                    className={`px-4 py-2 rounded-xl font-bold uppercase text-sm ${
+                      isBlocked ? "bg-rose-500" : "bg-white/20 backdrop-blur-sm"
+                    }`}
+                  >
                     {isBlocked ? "Blocked" : role}
                   </div>
                 </div>
@@ -1762,11 +1785,17 @@ export default function Profile() {
               <div className="flex gap-6">
                 <div className="text-center">
                   <div className="text-3xl font-black text-white mb-1">—</div>
-                  <div className="text-xs text-emerald-100 font-semibold uppercase tracking-wider">Jobs Applied</div>
+                  <div className="text-xs text-emerald-100 font-semibold uppercase tracking-wider">
+                    Jobs Applied
+                  </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-black text-white mb-1">{activeCases ?? 0}</div>
-                  <div className="text-xs text-emerald-100 font-semibold uppercase tracking-wider">Active Cases</div>
+                  <div className="text-3xl font-black text-white mb-1">
+                    {activeCases ?? 0}
+                  </div>
+                  <div className="text-xs text-emerald-100 font-semibold uppercase tracking-wider">
+                    Active Cases
+                  </div>
                 </div>
               </div>
             </div>
@@ -1792,23 +1821,37 @@ export default function Profile() {
               // READ-ONLY VIEW
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <InfoItem label="Full name" value={firstName || "-"} />
-                <InfoItem label="Contact" value={contact || "-"} icon={<Phone className="w-4 h-4" />} />
+                <InfoItem
+                  label="Contact"
+                  value={contact || "-"}
+                  icon={<Phone className="w-4 h-4" />}
+                />
                 <InfoItem label="Aadhar" value={aadhar || "-"} />
                 <InfoItem label="Role" value={role} />
                 <InfoItem label="Verified" value={verified ? "Yes" : "No"} />
-                <InfoItem label="Account status" value={isBlocked ? "Blocked" : "Active"} />
+                <InfoItem
+                  label="Account status"
+                  value={isBlocked ? "Blocked" : "Active"}
+                />
 
                 <div className="md:col-span-2">
-                  <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Skills</div>
+                  <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
+                    Skills
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {skills && skills.length ? (
                       skills.map((s) => (
-                        <span key={s} className="px-4 py-2 bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 rounded-full text-sm font-bold">
+                        <span
+                          key={s}
+                          className="px-4 py-2 bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 rounded-full text-sm font-bold"
+                        >
                           {s}
                         </span>
                       ))
                     ) : (
-                      <div className="text-sm text-slate-500">No skills added</div>
+                      <div className="text-sm text-slate-500">
+                        No skills added
+                      </div>
                     )}
                   </div>
                 </div>
@@ -1818,40 +1861,54 @@ export default function Profile() {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">Full name</label>
+                    <label className="block text-sm font-bold text-slate-900 mb-2">
+                      Full name
+                    </label>
                     <input
                       type="text"
                       value={firstName}
-                      onChange={(e) => setProfile((p) => ({ ...p, firstName: e.target.value }))}
+                      onChange={(e) =>
+                        setProfile((p) => ({ ...p, firstName: e.target.value }))
+                      }
                       className="text-black w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">Contact</label>
+                    <label className="block text-sm font-bold text-slate-900 mb-2">
+                      Contact
+                    </label>
                     <input
                       type="tel"
                       value={contact}
-                      onChange={(e) => setProfile((p) => ({ ...p, contact: e.target.value }))}
+                      onChange={(e) =>
+                        setProfile((p) => ({ ...p, contact: e.target.value }))
+                      }
                       className="text-black w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">Aadhar (optional)</label>
+                    <label className="block text-sm font-bold text-slate-900 mb-2">
+                      Aadhar (optional)
+                    </label>
                     <input
                       type="text"
                       value={aadhar || ""}
-                      onChange={(e) => setProfile((p) => ({ ...p, aadhar: e.target.value }))}
+                      onChange={(e) =>
+                        setProfile((p) => ({ ...p, aadhar: e.target.value }))
+                      }
                       className="text-black w-full px-4 py-3 rounded-2xl bg-slate-50 border-2 border-slate-200 focus:border-emerald-400 outline-none transition font-medium"
                       maxLength={12}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-bold text-slate-900 mb-2">Role</label>
+                    <label className="block text-sm font-bold text-slate-900 mb-2">
+                      Role
+                    </label>
                     <input
                       type="text"
                       value={role}
@@ -1862,7 +1919,9 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-3">Skills</label>
+                  <label className="block text-sm font-bold text-slate-900 mb-3">
+                    Skills
+                  </label>
                   <div className="flex flex-wrap gap-2">
                     {AVAILABLE_SKILLS.map((skill) => (
                       <button
@@ -1882,21 +1941,34 @@ export default function Profile() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">Location (coordinates)</label>
+                  <label className="block text-sm font-bold text-slate-900 mb-2">
+                    Location (coordinates)
+                  </label>
                   <div className="flex gap-3">
                     <input
                       type="text"
                       value={
-                        location?.coordinates ? `${location.coordinates[0]}, ${location.coordinates[1]}` : ""
+                        location?.coordinates
+                          ? `${location.coordinates[0]}, ${location.coordinates[1]}`
+                          : ""
                       }
                       onChange={(e) => {
                         const raw = e.target.value;
-                        const parts = raw.split(",").map((s) => s.trim()).filter(Boolean);
+                        const parts = raw
+                          .split(",")
+                          .map((s) => s.trim())
+                          .filter(Boolean);
                         if (parts.length === 2) {
                           const lng = Number(parts[0]);
                           const lat = Number(parts[1]);
                           if (!isNaN(lng) && !isNaN(lat)) {
-                            setProfile((p) => ({ ...p, location: { type: "Point", coordinates: [lng, lat] } }));
+                            setProfile((p) => ({
+                              ...p,
+                              location: {
+                                type: "Point",
+                                coordinates: [lng, lat],
+                              },
+                            }));
                           }
                         }
                       }}
@@ -1962,7 +2034,8 @@ export default function Profile() {
           </div>
 
           <div className="text-sm text-slate-500 font-medium">
-            Member since: {createdAt ? new Date(createdAt).toLocaleDateString() : "—"}
+            Member since:{" "}
+            {createdAt ? new Date(createdAt).toLocaleDateString() : "—"}
           </div>
         </div>
       </div>

@@ -29,7 +29,7 @@
 //       id: 2,
 //       title: "Smart Matching Based on Skills & Location",
 //       description:
-//         "KaamSetu recommends nearby jobs to workers using skills, role, distance and demand. Employers get a ranked list of best-fit workers.",
+//         "Karigar recommends nearby jobs to workers using skills, role, distance and demand. Employers get a ranked list of best-fit workers.",
 //       icon: Sparkles,
 //     },
 //     {
@@ -52,7 +52,7 @@
 //     worker: {
 //       title: "For Workers (Laborers)",
 //       tagline: "Find nearby work in minutes — no agents, no confusion.",
-//       bulletTitle: "Worker Journey on KaamSetu",
+//       bulletTitle: "Worker Journey on Karigar",
 //       bullets: [
 //         "Create your profile with name, skills, contact, and optional Aadhaar.",
 //         "Allow location or set your area to get hyperlocal job suggestions.",
@@ -64,19 +64,19 @@
 //     employer: {
 //       title: "For Employers",
 //       tagline: "Hire the right worker faster, with full visibility and control.",
-//       bulletTitle: "Employer Journey on KaamSetu",
+//       bulletTitle: "Employer Journey on Karigar",
 //       bullets: [
 //         "Post a job with role, work type, pay, location and duration.",
 //         "Review a ranked list of nearby workers with ratings and skills.",
 //         "Shortlist, chat, and confirm workers directly from the dashboard.",
 //         "Track attendance, mark completion and log payments for future reference.",
 //       ],
-//       highlight: "KaamSetu reduces time-to-hire and dependence on local agents or informal networks.",
+//       highlight: "Karigar reduces time-to-hire and dependence on local agents or informal networks.",
 //     },
 //     mediation: {
 //       title: "Mediation & Dispute Resolution",
 //       tagline: "If something goes wrong, the platform doesn’t leave you alone.",
-//       bulletTitle: "Mediation Journey on KaamSetu",
+//       bulletTitle: "Mediation Journey on Karigar",
 //       bullets: [
 //         "Worker or employer raises an issue from the job/booking (e.g. payment not received, unsafe conditions).",
 //         "Both parties submit brief descriptions and any proof (screenshots, photos, etc.).",
@@ -97,14 +97,14 @@
 //           <div>
 //             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-xs font-medium text-indigo-700 mb-3">
 //               <Sparkles className="w-3 h-3" />
-//               How KaamSetu Works
+//               How Karigar Works
 //             </div>
 //             <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 leading-snug">
 //               A simple, trust-first workflow <br className="hidden sm:block" />
 //               for rural labor hiring.
 //             </h1>
 //             <p className="mt-3 text-slate-600 text-sm lg:text-base">
-//               KaamSetu connects laborers, employers and mediators on a single platform.  
+//               Karigar connects laborers, employers and mediators on a single platform.
 //               No middlemen, no guesswork—just clear workflows, verified profiles and transparent processes.
 //             </p>
 
@@ -315,7 +315,7 @@
 //         {/* Lifecycle timeline */}
 //         <section className="mb-10">
 //           <div className="flex items-center justify-between mb-4">
-//             <h2 className="text-lg font-semibold text-slate-900">Job Lifecycle on KaamSetu</h2>
+//             <h2 className="text-lg font-semibold text-slate-900">Job Lifecycle on Karigar</h2>
 //             <p className="text-xs text-slate-500">From posting to completion and rating.</p>
 //           </div>
 //           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-4">
@@ -354,7 +354,7 @@
 //               <p className="text-xs font-semibold text-emerald-300 uppercase tracking-wide mb-1">
 //                 Ready to experience the flow?
 //               </p>
-//               <h3 className="text-lg font-semibold">KaamSetu turns chaotic labor markets into predictable workflows.</h3>
+//               <h3 className="text-lg font-semibold">Karigar turns chaotic labor markets into predictable workflows.</h3>
 //               <p className="text-xs text-slate-300 mt-1">
 //                 Use the same app to post jobs, apply for work, track status and resolve disputes.
 //               </p>
@@ -377,7 +377,7 @@
 //         </section>
 
 //         <footer className="text-[11px] text-slate-500 text-center mt-4">
-//           © {new Date().getFullYear()} KaamSetu · Rural Labor Exchange & Mediation Platform
+//           © {new Date().getFullYear()} Karigar · Rural Labor Exchange & Mediation Platform
 //         </footer>
 //       </div>
 //     </main>
@@ -420,65 +420,95 @@
 //   );
 // }
 
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from "react";
-import { ArrowRight, MapPin, Briefcase, ShieldCheck, MessageSquare, CheckCircle, Users, Sparkles, Clock, IndianRupee, AlertTriangle } from "lucide-react";
+import {
+  ArrowRight,
+  MapPin,
+  Briefcase,
+  ShieldCheck,
+  MessageSquare,
+  CheckCircle,
+  Users,
+  Sparkles,
+  Clock,
+  IndianRupee,
+  AlertTriangle,
+} from "lucide-react";
 
 export default function HowItWorks() {
   const [activeFlow, setActiveFlow] = useState("worker");
 
   const steps = [
-    { id: 1, title: "Create & Verify Your Profile", description: "Workers and employers sign up with basic details, phone verification and optional ID/Aadhaar. Verified badges increase trust and visibility.", icon: Users },
-    { id: 2, title: "Smart Matching Based on Skills & Location", description: "KaamSetu recommends nearby jobs to workers using skills, role, distance and demand. Employers get a ranked list of best-fit workers.", icon: Sparkles },
-    { id: 3, title: "Secure Hiring & Transparent Work", description: "Both parties confirm job details inside the app—timings, pay, location, and duration. Updates and communication stay on-platform.", icon: Briefcase },
-    { id: 4, title: "Payment & Mediation (If Needed)", description: "Payments can be logged or routed via escrow (future-ready). If issues arise, mediation and dispute resolution flows protect both sides.", icon: ShieldCheck },
+    {
+      id: 1,
+      title: "Create & Verify Your Profile",
+      description:
+        "Workers and employers sign up with basic details, phone verification and optional ID/Aadhaar. Verified badges increase trust and visibility.",
+      icon: Users,
+    },
+    {
+      id: 2,
+      title: "Smart Matching Based on Skills & Location",
+      description:
+        "Karigar recommends nearby jobs to workers using skills, role, distance and demand. Employers get a ranked list of best-fit workers.",
+      icon: Sparkles,
+    },
+    {
+      id: 3,
+      title: "Secure Hiring & Transparent Work",
+      description:
+        "Both parties confirm job details inside the app—timings, pay, location, and duration. Updates and communication stay on-platform.",
+      icon: Briefcase,
+    },
+    {
+      id: 4,
+      title: "Payment & Mediation (If Needed)",
+      description:
+        "Payments can be logged or routed via escrow (future-ready). If issues arise, mediation and dispute resolution flows protect both sides.",
+      icon: ShieldCheck,
+    },
   ];
 
   const flowContent = {
     worker: {
       title: "For Workers (Laborers)",
       tagline: "Find nearby work in minutes — no agents, no confusion.",
-      bulletTitle: "Worker Journey on KaamSetu",
+      bulletTitle: "Worker Journey on Karigar",
       bullets: [
         "Create your profile with name, skills, contact, and optional Aadhaar.",
         "Allow location or set your area to get hyperlocal job suggestions.",
         "Apply to suitable jobs and chat with employers inside the app.",
         "Reach the worksite, complete the task, and build your rating & work history.",
       ],
-      highlight: "The more you work, the stronger your digital reputation becomes — unlocking better paying jobs.",
+      highlight:
+        "The more you work, the stronger your digital reputation becomes — unlocking better paying jobs.",
     },
     employer: {
       title: "For Employers",
-      tagline: "Hire the right worker faster, with full visibility and control.",
-      bulletTitle: "Employer Journey on KaamSetu",
+      tagline:
+        "Hire the right worker faster, with full visibility and control.",
+      bulletTitle: "Employer Journey on Karigar",
       bullets: [
         "Post a job with role, work type, pay, location and duration.",
         "Review a ranked list of nearby workers with ratings and skills.",
         "Shortlist, chat, and confirm workers directly from the dashboard.",
         "Track attendance, mark completion and log payments for future reference.",
       ],
-      highlight: "KaamSetu reduces time-to-hire and dependence on local agents or informal networks.",
+      highlight:
+        "Karigar reduces time-to-hire and dependence on local agents or informal networks.",
     },
     mediation: {
       title: "Mediation & Dispute Resolution",
       tagline: "If something goes wrong, the platform doesn't leave you alone.",
-      bulletTitle: "Mediation Journey on KaamSetu",
+      bulletTitle: "Mediation Journey on Karigar",
       bullets: [
         "Worker or employer raises an issue from the job/booking (e.g. payment not received, unsafe conditions).",
         "Both parties submit brief descriptions and any proof (screenshots, photos, etc.).",
         "A mediator reviews the case, checks logs and suggests a fair outcome.",
         "Decision and actions (payment adjustment, block, warning) are recorded in the system.",
       ],
-      highlight: "Mediation builds long-term trust and discourages bad behavior on both sides.",
+      highlight:
+        "Mediation builds long-term trust and discourages bad behavior on both sides.",
     },
   };
 
@@ -498,14 +528,15 @@ export default function HowItWorks() {
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-emerald-100 to-teal-100 text-emerald-700 font-bold text-sm mb-6">
               <Sparkles className="w-4 h-4" />
-              How KaamSetu Works
+              How Karigar Works
             </div>
             <h1 className="text-4xl lg:text-5xl font-black bg-linear-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent leading-tight mb-6">
               A simple, trust-first workflow for rural labor hiring.
             </h1>
             <p className="text-lg text-slate-600 mb-8">
-              KaamSetu connects laborers, employers and mediators on a single platform.  
-              No middlemen, no guesswork—just clear workflows, verified profiles and transparent processes.
+              Karigar connects laborers, employers and mediators on a single
+              platform. No middlemen, no guesswork—just clear workflows,
+              verified profiles and transparent processes.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -528,25 +559,35 @@ export default function HowItWorks() {
           <div className="bg-linear-to-br from-white to-slate-50 rounded-3xl shadow-2xl border border-slate-200 p-8">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Platform Snapshot</p>
-                <p className="text-xl font-black text-slate-900">End-to-end labor lifecycle</p>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Platform Snapshot
+                </p>
+                <p className="text-xl font-black text-slate-900">
+                  End-to-end labor lifecycle
+                </p>
               </div>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-linear-to-r from-slate-900 to-slate-800 text-white text-xs font-bold">
                 Live Prototype <ArrowRight className="w-3 h-3" />
               </div>
             </div>
-            
+
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="rounded-2xl bg-linear-to-br from-emerald-50 to-teal-50 p-4 text-center border border-emerald-200">
-                <p className="text-xs text-slate-600 font-semibold mb-2">Workers onboarded</p>
+                <p className="text-xs text-slate-600 font-semibold mb-2">
+                  Workers onboarded
+                </p>
                 <p className="text-2xl font-black text-emerald-700">+120</p>
               </div>
               <div className="rounded-2xl bg-linear-to-br from-teal-50 to-cyan-50 p-4 text-center border border-teal-200">
-                <p className="text-xs text-slate-600 font-semibold mb-2">Jobs managed</p>
+                <p className="text-xs text-slate-600 font-semibold mb-2">
+                  Jobs managed
+                </p>
                 <p className="text-2xl font-black text-teal-700">+80</p>
               </div>
               <div className="rounded-2xl bg-linear-to-br from-cyan-50 to-blue-50 p-4 text-center border border-cyan-200">
-                <p className="text-xs text-slate-600 font-semibold mb-2">Mediated disputes</p>
+                <p className="text-xs text-slate-600 font-semibold mb-2">
+                  Mediated disputes
+                </p>
                 <p className="text-2xl font-black text-cyan-700">✓ Resolved</p>
               </div>
             </div>
@@ -571,10 +612,14 @@ export default function HowItWorks() {
         {/* Core Flow Steps */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-black text-slate-900">Core Platform Flow</h2>
-            <p className="text-sm text-slate-600 font-medium">Same backbone, tailored for workers, employers and mediators.</p>
+            <h2 className="text-2xl font-black text-slate-900">
+              Core Platform Flow
+            </h2>
+            <p className="text-sm text-slate-600 font-medium">
+              Same backbone, tailored for workers, employers and mediators.
+            </p>
           </div>
-          
+
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {steps.map((s) => {
               const Icon = s.icon;
@@ -584,7 +629,7 @@ export default function HowItWorks() {
                   className="group relative bg-linear-to-br from-white to-slate-50 rounded-3xl border border-slate-200 shadow-lg hover:shadow-2xl transition-all duration-500 p-6 overflow-hidden hover:scale-105"
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-emerald-500/0 to-teal-500/0 group-hover:from-emerald-500/5 group-hover:to-teal-500/5 transition-all duration-500" />
-                  
+
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-4">
                       <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-emerald-100 to-teal-100 text-emerald-700 flex items-center justify-center text-lg font-black shadow-lg">
@@ -592,8 +637,12 @@ export default function HowItWorks() {
                       </div>
                     </div>
                     <Icon className="w-8 h-8 text-emerald-600 mb-4" />
-                    <h3 className="text-lg font-black text-slate-900 mb-3">{s.title}</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">{s.description}</p>
+                    <h3 className="text-lg font-black text-slate-900 mb-3">
+                      {s.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">
+                      {s.description}
+                    </p>
                   </div>
                 </div>
               );
@@ -604,13 +653,15 @@ export default function HowItWorks() {
         {/* Detailed Flows */}
         <section className="mb-16">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <h2 className="text-2xl font-black text-slate-900">Detailed Flows</h2>
+            <h2 className="text-2xl font-black text-slate-900">
+              Detailed Flows
+            </h2>
             <div className="inline-flex gap-2 p-2 rounded-2xl bg-white border-2 border-slate-200 shadow-lg">
               <button
                 onClick={() => setActiveFlow("worker")}
                 className={`px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold text-sm transition-all ${
-                  activeFlow === "worker" 
-                    ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg" 
+                  activeFlow === "worker"
+                    ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
                     : "text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -619,8 +670,8 @@ export default function HowItWorks() {
               <button
                 onClick={() => setActiveFlow("employer")}
                 className={`px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold text-sm transition-all ${
-                  activeFlow === "employer" 
-                    ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg" 
+                  activeFlow === "employer"
+                    ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
                     : "text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -629,8 +680,8 @@ export default function HowItWorks() {
               <button
                 onClick={() => setActiveFlow("mediation")}
                 className={`px-5 py-2.5 rounded-xl flex items-center gap-2 font-bold text-sm transition-all ${
-                  activeFlow === "mediation" 
-                    ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg" 
+                  activeFlow === "mediation"
+                    ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg"
                     : "text-slate-600 hover:bg-slate-50"
                 }`}
               >
@@ -645,14 +696,19 @@ export default function HowItWorks() {
               <p className="text-xs font-black text-emerald-600 mb-2 uppercase tracking-wider">
                 {currentFlow.title}
               </p>
-              <h3 className="text-2xl font-black text-slate-900 mb-4">{currentFlow.tagline}</h3>
+              <h3 className="text-2xl font-black text-slate-900 mb-4">
+                {currentFlow.tagline}
+              </h3>
               <p className="text-sm text-slate-600 font-semibold mb-6">
                 {currentFlow.bulletTitle}
               </p>
 
               <ol className="space-y-4 mb-6">
                 {currentFlow.bullets.map((b, idx) => (
-                  <li key={idx} className="flex items-start gap-3 text-sm text-slate-700">
+                  <li
+                    key={idx}
+                    className="flex items-start gap-3 text-sm text-slate-700"
+                  >
                     <span className="shrink-0 w-6 h-6 rounded-full bg-linear-to-br from-emerald-100 to-teal-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
                       {idx + 1}
                     </span>
@@ -663,7 +719,9 @@ export default function HowItWorks() {
 
               <div className="rounded-2xl bg-linear-to-r from-slate-900 to-slate-800 text-white p-6 flex items-start gap-3">
                 <CheckCircle className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
-                <p className="text-sm leading-relaxed">{currentFlow.highlight}</p>
+                <p className="text-sm leading-relaxed">
+                  {currentFlow.highlight}
+                </p>
               </div>
             </div>
 
@@ -671,23 +729,68 @@ export default function HowItWorks() {
             <div className="space-y-4">
               {activeFlow === "worker" && (
                 <>
-                  <MiniInfoCard icon={MapPin} title="Location-aware jobs" text="Jobs appear based on your saved area or GPS, reducing travel time and cost." gradient="from-emerald-500 to-teal-500" />
-                  <MiniInfoCard icon={Clock} title="Daily & weekly work" text="Supports both one-day gigs and short-term contracts for rural workers." gradient="from-teal-500 to-cyan-500" />
-                  <MiniInfoCard icon={IndianRupee} title="Proof of work" text="Digital records of jobs completed help workers negotiate better wages in future." gradient="from-cyan-500 to-blue-500" />
+                  <MiniInfoCard
+                    icon={MapPin}
+                    title="Location-aware jobs"
+                    text="Jobs appear based on your saved area or GPS, reducing travel time and cost."
+                    gradient="from-emerald-500 to-teal-500"
+                  />
+                  <MiniInfoCard
+                    icon={Clock}
+                    title="Daily & weekly work"
+                    text="Supports both one-day gigs and short-term contracts for rural workers."
+                    gradient="from-teal-500 to-cyan-500"
+                  />
+                  <MiniInfoCard
+                    icon={IndianRupee}
+                    title="Proof of work"
+                    text="Digital records of jobs completed help workers negotiate better wages in future."
+                    gradient="from-cyan-500 to-blue-500"
+                  />
                 </>
               )}
               {activeFlow === "employer" && (
                 <>
-                  <MiniInfoCard icon={Sparkles} title="Ranked worker list" text="Employers see top-matching workers first, based on skills, distance and rating." gradient="from-emerald-500 to-teal-500" />
-                  <MiniInfoCard icon={MessageSquare} title="On-platform chat" text="No need to share phone numbers initially; chat before confirming a worker." gradient="from-teal-500 to-cyan-500" />
-                  <MiniInfoCard icon={ShieldCheck} title="Reduced risk" text="Verified profiles and mediation options reduce payment and quality risk." gradient="from-cyan-500 to-blue-500" />
+                  <MiniInfoCard
+                    icon={Sparkles}
+                    title="Ranked worker list"
+                    text="Employers see top-matching workers first, based on skills, distance and rating."
+                    gradient="from-emerald-500 to-teal-500"
+                  />
+                  <MiniInfoCard
+                    icon={MessageSquare}
+                    title="On-platform chat"
+                    text="No need to share phone numbers initially; chat before confirming a worker."
+                    gradient="from-teal-500 to-cyan-500"
+                  />
+                  <MiniInfoCard
+                    icon={ShieldCheck}
+                    title="Reduced risk"
+                    text="Verified profiles and mediation options reduce payment and quality risk."
+                    gradient="from-cyan-500 to-blue-500"
+                  />
                 </>
               )}
               {activeFlow === "mediation" && (
                 <>
-                  <MiniInfoCard icon={AlertTriangle} title="Structured complaints" text="Disputes are raised with categories and details, not just verbal blame." gradient="from-emerald-500 to-teal-500" />
-                  <MiniInfoCard icon={ShieldCheck} title="Neutral mediators" text="Mediators see both sides, platform logs and previous behavior before deciding." gradient="from-teal-500 to-cyan-500" />
-                  <MiniInfoCard icon={IndianRupee} title="Linked to payments" text="Decisions can trigger partial/ full payments, warnings or blocks." gradient="from-cyan-500 to-blue-500" />
+                  <MiniInfoCard
+                    icon={AlertTriangle}
+                    title="Structured complaints"
+                    text="Disputes are raised with categories and details, not just verbal blame."
+                    gradient="from-emerald-500 to-teal-500"
+                  />
+                  <MiniInfoCard
+                    icon={ShieldCheck}
+                    title="Neutral mediators"
+                    text="Mediators see both sides, platform logs and previous behavior before deciding."
+                    gradient="from-teal-500 to-cyan-500"
+                  />
+                  <MiniInfoCard
+                    icon={IndianRupee}
+                    title="Linked to payments"
+                    text="Decisions can trigger partial/ full payments, warnings or blocks."
+                    gradient="from-cyan-500 to-blue-500"
+                  />
                 </>
               )}
             </div>
@@ -697,33 +800,37 @@ export default function HowItWorks() {
         {/* Job Lifecycle */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-black text-slate-900">Job Lifecycle on KaamSetu</h2>
-            <p className="text-sm text-slate-600 font-medium">From posting to completion and rating.</p>
+            <h2 className="text-2xl font-black text-slate-900">
+              Job Lifecycle on Karigar
+            </h2>
+            <p className="text-sm text-slate-600 font-medium">
+              From posting to completion and rating.
+            </p>
           </div>
-          
+
           <div className="bg-linear-to-br from-white to-slate-50 rounded-3xl border border-slate-200 shadow-xl p-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <TimelineItem 
-                label="1. Post" 
-                title="Employer posts a job" 
+              <TimelineItem
+                label="1. Post"
+                title="Employer posts a job"
                 text="Role, pay, timings and location are added. The job goes live for nearby workers."
                 gradient="from-emerald-500 to-teal-500"
               />
-              <TimelineItem 
-                label="2. Match" 
-                title="Workers apply" 
+              <TimelineItem
+                label="2. Match"
+                title="Workers apply"
                 text="Workers with relevant skills and proximity apply or are invited."
                 gradient="from-teal-500 to-cyan-500"
               />
-              <TimelineItem 
-                label="3. Work" 
-                title="Task completion" 
+              <TimelineItem
+                label="3. Work"
+                title="Task completion"
                 text="Worker reaches site, completes the job. Attendance can be marked on app."
                 gradient="from-cyan-500 to-blue-500"
               />
-              <TimelineItem 
-                label="4. Close" 
-                title="Payment & rating" 
+              <TimelineItem
+                label="4. Close"
+                title="Payment & rating"
                 text="Payment is logged, and both sides can rate each other for future trust."
                 gradient="from-blue-500 to-indigo-500"
               />
@@ -738,15 +845,19 @@ export default function HowItWorks() {
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-3xl" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500 rounded-full blur-3xl" />
             </div>
-            
+
             <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
               <div>
                 <p className="text-xs font-black text-emerald-400 uppercase tracking-wider mb-2">
                   Ready to experience the flow?
                 </p>
-                <h3 className="text-2xl font-black mb-3">KaamSetu turns chaotic labor markets into predictable workflows.</h3>
+                <h3 className="text-2xl font-black mb-3">
+                  Karigar turns chaotic labor markets into predictable
+                  workflows.
+                </h3>
                 <p className="text-sm text-slate-300">
-                  Use the same app to post jobs, apply for work, track status and resolve disputes.
+                  Use the same app to post jobs, apply for work, track status
+                  and resolve disputes.
                 </p>
               </div>
               <div className="flex gap-3">
@@ -768,7 +879,8 @@ export default function HowItWorks() {
         </section>
 
         <footer className="text-sm text-slate-500 text-center font-medium">
-          © {new Date().getFullYear()} KaamSetu · Rural Labor Exchange & Mediation Platform
+          © {new Date().getFullYear()} Karigar · Rural Labor Exchange &
+          Mediation Platform
         </footer>
       </div>
     </main>
@@ -779,7 +891,9 @@ function MiniInfoCard({ icon: Icon, title, text, gradient }) {
   return (
     <div className="bg-linear-to-br from-white to-slate-50 rounded-2xl border border-slate-200 shadow-lg p-5 hover:shadow-xl transition-all">
       <div className="flex items-start gap-3">
-        <div className={`w-10 h-10 rounded-xl bg-linear-to-br ${gradient} flex items-center justify-center shrink-0 shadow-lg`}>
+        <div
+          className={`w-10 h-10 rounded-xl bg-linear-to-br ${gradient} flex items-center justify-center shrink-0 shadow-lg`}
+        >
           <Icon className="w-5 h-5 text-white" />
         </div>
         <div>
@@ -794,10 +908,14 @@ function MiniInfoCard({ icon: Icon, title, text, gradient }) {
 function TimelineItem({ label, title, text, gradient }) {
   return (
     <div className="relative">
-      <div className={`inline-flex items-center justify-center w-8 h-8 rounded-xl bg-linear-to-br ${gradient} text-white font-black text-sm mb-4 shadow-lg`}>
+      <div
+        className={`inline-flex items-center justify-center w-8 h-8 rounded-xl bg-linear-to-br ${gradient} text-white font-black text-sm mb-4 shadow-lg`}
+      >
         {label[0]}
       </div>
-      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">{label}</p>
+      <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+        {label}
+      </p>
       <p className="font-black text-slate-900 mb-2">{title}</p>
       <p className="text-sm text-slate-600 leading-relaxed">{text}</p>
     </div>

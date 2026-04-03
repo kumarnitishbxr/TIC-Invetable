@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -386,27 +385,42 @@ export default function LandingHeader() {
       <div className="lh-root">
         <header className={`lh-header${scrolled ? " scrolled" : ""}`}>
           <div className="lh-inner">
-
-            <button onClick={() => navigate("/")} className="lh-brand" aria-label="Go home">
+            <button
+              onClick={() => navigate("/")}
+              className="lh-brand"
+              aria-label="Go home"
+            >
               <div className="lh-logo-mark">WL</div>
               <div className="lh-brand-text">
-                <span className="lh-brand-name">WorkLink</span>
+                <span className="lh-brand-name">Karigar</span>
                 <span className="lh-brand-sub">Empowering Rural Workers</span>
               </div>
             </button>
 
             <div className="lh-desk">
               <nav className="lh-nav">
-                <Link to="/jobpage" className="lh-nav-link">Jobs</Link>
-                <Link to="/featurespage" className="lh-nav-link">Features</Link>
-                <Link to="/aboutpage" className="lh-nav-link">About</Link>
+                <Link to="/jobpage" className="lh-nav-link">
+                  Jobs
+                </Link>
+                <Link to="/featurespage" className="lh-nav-link">
+                  Features
+                </Link>
+                <Link to="/aboutpage" className="lh-nav-link">
+                  About
+                </Link>
               </nav>
 
               <div className="lh-btn-group">
-                <button onClick={() => navigate("/login")} className="lh-btn-ghost">
+                <button
+                  onClick={() => navigate("/login")}
+                  className="lh-btn-ghost"
+                >
                   Sign In
                 </button>
-                <button onClick={() => navigate("/signup")} className="lh-btn-primary">
+                <button
+                  onClick={() => navigate("/signup")}
+                  className="lh-btn-primary"
+                >
                   Get Started
                 </button>
               </div>
@@ -417,27 +431,58 @@ export default function LandingHeader() {
               aria-label="Toggle menu"
               className="lh-hamburger"
             >
-              {open
-                ? <X style={{ width: 18, height: 18 }} />
-                : <Menu style={{ width: 18, height: 18 }} />
-              }
+              {open ? (
+                <X style={{ width: 18, height: 18 }} />
+              ) : (
+                <Menu style={{ width: 18, height: 18 }} />
+              )}
             </button>
           </div>
 
           {open && (
             <div className="lh-drawer">
               <nav>
-                <a href="#jobs" onClick={() => setOpen(false)} className="lh-mob-link">Jobs</a>
-                <a href="#features" onClick={() => setOpen(false)} className="lh-mob-link">Features</a>
-                <a href="#about" onClick={() => setOpen(false)} className="lh-mob-link">About</a>
+                <a
+                  href="#jobs"
+                  onClick={() => setOpen(false)}
+                  className="lh-mob-link"
+                >
+                  Jobs
+                </a>
+                <a
+                  href="#features"
+                  onClick={() => setOpen(false)}
+                  className="lh-mob-link"
+                >
+                  Features
+                </a>
+                <a
+                  href="#about"
+                  onClick={() => setOpen(false)}
+                  className="lh-mob-link"
+                >
+                  About
+                </a>
               </nav>
 
               <hr className="lh-mob-divider" />
 
-              <button onClick={() => { setOpen(false); navigate("/signin"); }} className="lh-mob-ghost">
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/signin");
+                }}
+                className="lh-mob-ghost"
+              >
                 Sign In
               </button>
-              <button onClick={() => { setOpen(false); navigate("/signup"); }} className="lh-mob-primary">
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  navigate("/signup");
+                }}
+                className="lh-mob-primary"
+              >
                 Get Started
               </button>
             </div>

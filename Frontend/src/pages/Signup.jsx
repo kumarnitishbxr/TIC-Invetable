@@ -1,6 +1,3 @@
-
-
-
 // import React, { useState, useEffect, useRef } from "react";
 // import { User, Mail, Phone, Lock, ArrowRight, CheckCircle } from "lucide-react";
 // import { NavLink, useNavigate } from "react-router-dom";
@@ -55,7 +52,7 @@
 //           <h1 className="text-3xl font-black bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
 //             Create Account
 //           </h1>
-//           <p className="text-slate-600 mt-1">Join KaamSetu and find work today</p>
+//           <p className="text-slate-600 mt-1">Join Karigar and find work today</p>
 //         </div>
 
 //         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -210,7 +207,7 @@
 //             </div>
 
 //             <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-6">
-//               <h4 className="text-sm font-semibold text-slate-900 mb-3">Why KaamSetu?</h4>
+//               <h4 className="text-sm font-semibold text-slate-900 mb-3">Why Karigar?</h4>
 //               <ul className="space-y-3 text-sm text-emerald-700">
 //                 <li className="flex items-center gap-3">
 //                   <CheckCircle className="w-5 h-5" />
@@ -240,7 +237,7 @@
 //         </div>
 
 //         <div className="mt-10 text-center text-xs text-slate-500">
-//           <p>© {currentYear} KaamSetu — By registering you agree to our Terms.</p>
+//           <p>© {currentYear} Karigar — By registering you agree to our Terms.</p>
 //         </div>
 //       </div>
 //     </div>
@@ -248,8 +245,6 @@
 // };
 
 // export default Register;
-
-
 
 import React, { useState, useEffect, useRef } from "react";
 import { User, Mail, Phone, Lock, ArrowRight, CheckCircle } from "lucide-react";
@@ -281,7 +276,11 @@ const Register = () => {
     if (isAuthenticated) navigate("/");
   }, [isAuthenticated, navigate]);
 
-  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(registerSchema) });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(registerSchema) });
 
   const onSubmit = (data) => dispatch(registerUser(data));
   const handleGoogle = () => alert("Mock: Launch Google OAuth flow");
@@ -648,7 +647,7 @@ const Register = () => {
           {/* Heading */}
           <div style={{ textAlign: "center", marginBottom: "8px" }}>
             <h1 className="rg-title">Create Account</h1>
-            <p className="rg-sub">Join KaamSetu and find work today</p>
+            <p className="rg-sub">Join Karigar and find work today</p>
           </div>
 
           <div className="rg-grid">
@@ -659,7 +658,19 @@ const Register = () => {
                 <div className="rg-field">
                   <label className="rg-label">Full Name</label>
                   <div style={{ position: "relative" }}>
-                    <User className="rg-icon" style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", width:16, height:16, color:"rgba(0,240,255,0.4)", pointerEvents:"none" }} />
+                    <User
+                      className="rg-icon"
+                      style={{
+                        position: "absolute",
+                        left: 14,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        width: 16,
+                        height: 16,
+                        color: "rgba(0,240,255,0.4)",
+                        pointerEvents: "none",
+                      }}
+                    />
                     <input
                       placeholder="John Doe"
                       ref={firstNameInputRef}
@@ -668,14 +679,27 @@ const Register = () => {
                       {...register("firstName")}
                     />
                   </div>
-                  {errors.firstName && <p className="rg-err">⚠ {errors.firstName.message}</p>}
+                  {errors.firstName && (
+                    <p className="rg-err">⚠ {errors.firstName.message}</p>
+                  )}
                 </div>
 
                 {/* Email */}
                 <div className="rg-field">
                   <label className="rg-label">Email Address</label>
                   <div style={{ position: "relative" }}>
-                    <Mail style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", width:16, height:16, color:"rgba(0,240,255,0.4)", pointerEvents:"none" }} />
+                    <Mail
+                      style={{
+                        position: "absolute",
+                        left: 14,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        width: 16,
+                        height: 16,
+                        color: "rgba(0,240,255,0.4)",
+                        pointerEvents: "none",
+                      }}
+                    />
                     <input
                       type="email"
                       placeholder="john@example.com"
@@ -684,14 +708,27 @@ const Register = () => {
                       {...register("emailId")}
                     />
                   </div>
-                  {errors.emailId && <p className="rg-err">⚠ {errors.emailId.message}</p>}
+                  {errors.emailId && (
+                    <p className="rg-err">⚠ {errors.emailId.message}</p>
+                  )}
                 </div>
 
                 {/* Contact */}
                 <div className="rg-field">
                   <label className="rg-label">Contact Number</label>
                   <div style={{ position: "relative" }}>
-                    <Phone style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", width:16, height:16, color:"rgba(0,240,255,0.4)", pointerEvents:"none" }} />
+                    <Phone
+                      style={{
+                        position: "absolute",
+                        left: 14,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        width: 16,
+                        height: 16,
+                        color: "rgba(0,240,255,0.4)",
+                        pointerEvents: "none",
+                      }}
+                    />
                     <input
                       placeholder="9876543210"
                       maxLength={10}
@@ -700,14 +737,27 @@ const Register = () => {
                       {...register("contact")}
                     />
                   </div>
-                  {errors.contact && <p className="rg-err">⚠ {errors.contact.message}</p>}
+                  {errors.contact && (
+                    <p className="rg-err">⚠ {errors.contact.message}</p>
+                  )}
                 </div>
 
                 {/* Password */}
                 <div className="rg-field">
                   <label className="rg-label">Password</label>
                   <div style={{ position: "relative" }}>
-                    <Lock style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)", width:16, height:16, color:"rgba(0,240,255,0.4)", pointerEvents:"none" }} />
+                    <Lock
+                      style={{
+                        position: "absolute",
+                        left: 14,
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        width: 16,
+                        height: 16,
+                        color: "rgba(0,240,255,0.4)",
+                        pointerEvents: "none",
+                      }}
+                    />
                     <input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter password"
@@ -719,25 +769,34 @@ const Register = () => {
                       type="button"
                       className="rg-eye"
                       onClick={() => setShowPassword((p) => !p)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
                     >
                       {showPassword ? "🙈" : "👁️"}
                     </button>
                   </div>
-                  {errors.password && <p className="rg-err">⚠ {errors.password.message}</p>}
+                  {errors.password && (
+                    <p className="rg-err">⚠ {errors.password.message}</p>
+                  )}
                 </div>
 
                 {/* Submit */}
                 <button type="submit" disabled={loading} className="rg-submit">
                   {loading ? (
-                    <><div className="rg-spin" /> Registering...</>
+                    <>
+                      <div className="rg-spin" /> Registering...
+                    </>
                   ) : (
-                    <>Register <ArrowRight style={{ width: 16, height: 16 }} /></>
+                    <>
+                      Register <ArrowRight style={{ width: 16, height: 16 }} />
+                    </>
                   )}
                 </button>
 
                 <p className="rg-terms">
-                  By registering, you agree to our Terms of Service and Privacy Policy.
+                  By registering, you agree to our Terms of Service and Privacy
+                  Policy.
                 </p>
               </form>
             </div>
@@ -746,20 +805,36 @@ const Register = () => {
             <div className="rg-side-space">
               {/* OAuth card */}
               <div className="rg-side-card">
-                <div style={{ display:"flex", alignItems:"flex-start", justifyContent:"space-between", marginBottom: 14 }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    justifyContent: "space-between",
+                    marginBottom: 14,
+                  }}
+                >
                   <div>
                     <div className="rg-side-title">Quick Sign Up</div>
-                    <div className="rg-side-sub">Use your Google identity to get started fast</div>
+                    <div className="rg-side-sub">
+                      Use your Google identity to get started fast
+                    </div>
                   </div>
                   <span className="rg-badge">Fast · Secure</span>
                 </div>
 
                 <div className="rg-btn-row">
                   <button onClick={handleGoogle} className="rg-google-btn">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" style={{ width:18, height:18 }} />
+                    <img
+                      src="https://www.svgrepo.com/show/475656/google-color.svg"
+                      alt="Google"
+                      style={{ width: 18, height: 18 }}
+                    />
                     Continue with Google
                   </button>
-                  <button onClick={() => firstNameInputRef.current?.focus()} className="rg-email-btn">
+                  <button
+                    onClick={() => firstNameInputRef.current?.focus()}
+                    className="rg-email-btn"
+                  >
                     Continue with Email
                   </button>
                 </div>
@@ -767,7 +842,9 @@ const Register = () => {
 
               {/* Perks card */}
               <div className="rg-side-card">
-                <div className="rg-side-title" style={{ marginBottom: 14 }}>Why KaamSetu?</div>
+                <div className="rg-side-title" style={{ marginBottom: 14 }}>
+                  Why Karigar?
+                </div>
                 <div className="rg-perk">
                   <div className="rg-perk-icon">
                     <CheckCircle style={{ width: 15, height: 15 }} />
@@ -791,12 +868,16 @@ const Register = () => {
               {/* Login link */}
               <div className="rg-login-wrap">
                 <p className="rg-login-text">Already have an account?</p>
-                <NavLink to="/login" className="rg-login-link">Login →</NavLink>
+                <NavLink to="/login" className="rg-login-link">
+                  Login →
+                </NavLink>
               </div>
             </div>
           </div>
 
-          <div className="rg-footer">© {currentYear} KaamSetu — By registering you agree to our Terms.</div>
+          <div className="rg-footer">
+            © {currentYear} Karigar — By registering you agree to our Terms.
+          </div>
         </div>
       </div>
     </>

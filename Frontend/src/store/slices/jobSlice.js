@@ -9,7 +9,7 @@ export const createJob = createAsyncThunk(
   "job/create",
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post("/api/job", formData);
+      const res = await axios.post("/api/jobs/create", formData);
       return res.data.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || "Create failed");

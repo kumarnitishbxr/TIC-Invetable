@@ -338,7 +338,7 @@ const VALUES = [
 
 export default function AboutPage() {
   useEffect(() => {
-    const id = "kaamsetu-about-styles";
+    const id = "Karigar-about-styles";
     if (!document.getElementById(id)) {
       const el = document.createElement("style");
       el.id = id;
@@ -368,11 +368,11 @@ export default function AboutPage() {
             <h1 className="ab-hero-heading">
               <span className="ab-plain-text">About</span>
               <br />
-              <span className="ab-grad-text">KaamSetu</span>
+              <span className="ab-grad-text">Karigar</span>
             </h1>
 
             <p className="ab-hero-desc">
-              KaamSetu is built to make local daily-wage work discoverable, safe and fair.
+              Karigar is built to make local daily-wage work discoverable, safe and fair.
               We design for low-bandwidth environments, simple onboarding, and transparent
               payments so workers and employers can transact with trust.
             </p>
@@ -434,7 +434,7 @@ export default function AboutPage() {
       <section className="ab-section" style={{ paddingTop: 0 }}>
         <div className="ab-container">
           <div className="ab-values-wrap">
-            <div className="ab-values-title">Why Choose KaamSetu?</div>
+            <div className="ab-values-title">Why Choose Karigar?</div>
             <div className="ab-values-grid">
               {VALUES.map(({ title, desc }) => (
                 <div key={title} className="ab-value-item">
