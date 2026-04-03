@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import User from '../Models/User.js'
-import redisClient from '../config/Redis.js'
+import User from '../models/user.model.js'
+import redisClient from '../config/redis.config.js'
 
 
 
