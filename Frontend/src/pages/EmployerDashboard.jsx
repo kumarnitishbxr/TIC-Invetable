@@ -1,13 +1,23 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
-  Briefcase, Users, Wallet, ArrowUpRight, ArrowRight, Plus, Search,
-  Filter, UserCheck, CreditCard, Clock, CheckCircle2, IndianRupee,
-  TrendingUp, MapPin,
+  Briefcase,
+  Users,
+  Wallet,
+  ArrowUpRight,
+  ArrowRight,
+  Plus,
+  Search,
+  Filter,
+  UserCheck,
+  CreditCard,
+  Clock,
+  CheckCircle2,
+  IndianRupee,
+  TrendingUp,
+  MapPin,
 } from "lucide-react";
 import axiosClient from "../API/axiosClient";
-
 
 const dashCSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
@@ -333,16 +343,54 @@ const dashCSS = `
 `;
 
 const jobStats = [
-  { label: "Open Jobs",           value: 5,        subtext: "2 closing this week",  icon: Briefcase  },
-  { label: "Total Applications",  value: 132,      subtext: "18 new today",         icon: Users      },
-  { label: "Hires This Month",    value: 9,        subtext: "On track for target",  icon: UserCheck  },
-  { label: "Total Spent",         value: "₹84,300",subtext: "Across 3 months",      icon: Wallet     },
+  {
+    label: "Open Jobs",
+    value: 5,
+    subtext: "2 closing this week",
+    icon: Briefcase,
+  },
+  {
+    label: "Total Applications",
+    value: 132,
+    subtext: "18 new today",
+    icon: Users,
+  },
+  {
+    label: "Hires This Month",
+    value: 9,
+    subtext: "On track for target",
+    icon: UserCheck,
+  },
+  {
+    label: "Total Spent",
+    value: "₹84,300",
+    subtext: "Across 3 months",
+    icon: Wallet,
+  },
 ];
 
 const recentApplications = [
-  { name: "Ravi Kumar",    role: "Warehouse Helper",     experience: "2 yrs", stage: "Shortlisted",          appliedAt: "3h ago"   },
-  { name: "Sangeeta Devi", role: "Domestic Helper",      experience: "5 yrs", stage: "Interview Scheduled",  appliedAt: "Yesterday" },
-  { name: "Imran Ali",     role: "House Painting Crew",  experience: "3 yrs", stage: "New",                  appliedAt: "Just now"  },
+  {
+    name: "Ravi Kumar",
+    role: "Warehouse Helper",
+    experience: "2 yrs",
+    stage: "Shortlisted",
+    appliedAt: "3h ago",
+  },
+  {
+    name: "Sangeeta Devi",
+    role: "Domestic Helper",
+    experience: "5 yrs",
+    stage: "Interview Scheduled",
+    appliedAt: "Yesterday",
+  },
+  {
+    name: "Imran Ali",
+    role: "House Painting Crew",
+    experience: "3 yrs",
+    stage: "New",
+    appliedAt: "Just now",
+  },
 ];
 
 const paymentSummary = {
@@ -352,33 +400,74 @@ const paymentSummary = {
 };
 
 const recentPayments = [
-  { id: "#PAY-9821", purpose: "Wages - House Painting Crew",   amount: "₹18,000", status: "Completed",  date: "25 Nov", method: "UPI"           },
-  { id: "#PAY-9775", purpose: "Advance - Warehouse Helpers",   amount: "₹7,500",  status: "Processing", date: "23 Nov", method: "Bank Transfer"  },
-  { id: "#PAY-9710", purpose: "Full & Final - Electrician",    amount: "₹12,800", status: "Completed",  date: "18 Nov", method: "UPI"           },
+  {
+    id: "#PAY-9821",
+    purpose: "Wages - House Painting Crew",
+    amount: "₹18,000",
+    status: "Completed",
+    date: "25 Nov",
+    method: "UPI",
+  },
+  {
+    id: "#PAY-9775",
+    purpose: "Advance - Warehouse Helpers",
+    amount: "₹7,500",
+    status: "Processing",
+    date: "23 Nov",
+    method: "Bank Transfer",
+  },
+  {
+    id: "#PAY-9710",
+    purpose: "Full & Final - Electrician",
+    amount: "₹12,800",
+    status: "Completed",
+    date: "18 Nov",
+    method: "UPI",
+  },
 ];
 
 const recentActivity = [
-  { type: "job",     title: "New job posted",      description: "Warehouse Helper at Noida Sector 63",          time: "2h ago"    },
-  { type: "hire",    title: "Candidate hired",     description: "Ravi Kumar hired for Construction Helper",     time: "Yesterday" },
-  { type: "payment", title: "Payment completed",   description: "₹18,000 paid for House Painting Crew",        time: "2 days ago"},
-  { type: "job",     title: "Job closed",          description: "Electrician (Residential) marked as filled",  time: "5 days ago"},
+  {
+    type: "job",
+    title: "New job posted",
+    description: "Warehouse Helper at Noida Sector 63",
+    time: "2h ago",
+  },
+  {
+    type: "hire",
+    title: "Candidate hired",
+    description: "Ravi Kumar hired for Construction Helper",
+    time: "Yesterday",
+  },
+  {
+    type: "payment",
+    title: "Payment completed",
+    description: "₹18,000 paid for House Painting Crew",
+    time: "2 days ago",
+  },
+  {
+    type: "job",
+    title: "Job closed",
+    description: "Electrician (Residential) marked as filled",
+    time: "5 days ago",
+  },
 ];
 
 // ── HELPERS ───────────────────────────────────────────────────────────────
 function stageClass(stage) {
-  if (stage === "New")                  return "ed-stage-new";
-  if (stage === "Shortlisted")          return "ed-stage-shortlisted";
+  if (stage === "New") return "ed-stage-new";
+  if (stage === "Shortlisted") return "ed-stage-shortlisted";
   return "ed-stage-interview";
 }
 function statusClass(status) {
-  if (status === "Open")         return "ed-status-open";
+  if (status === "Open") return "ed-status-open";
   if (status === "Interviewing") return "ed-status-int";
   return "ed-status-closed";
 }
 
 // ── COMPONENT ─────────────────────────────────────────────────────────────
 const EmployerDashboard = () => {
-  const employerName = "KaamSetu Employer";
+  const employerName = "Karigar Employer";
   const [recentJobs, setRecentJobs] = useState([]);
 
   useEffect(() => {
@@ -389,7 +478,9 @@ const EmployerDashboard = () => {
       el.textContent = dashCSS;
       document.head.appendChild(el);
     }
-    return () => { document.getElementById(id)?.remove(); };
+    return () => {
+      document.getElementById(id)?.remove();
+    };
   }, []);
 
   useEffect(() => {
@@ -416,7 +507,8 @@ const EmployerDashboard = () => {
               Hi, {employerName.split(" ")[0]} — let's manage your workforce 🚀
             </div>
             <div className="ed-header-sub">
-              Post jobs, track applications, review payments, and keep a history of all your hiring activity in one place.
+              Post jobs, track applications, review payments, and keep a history
+              of all your hiring activity in one place.
             </div>
           </div>
           <div className="ed-header-actions">
@@ -435,7 +527,6 @@ const EmployerDashboard = () => {
       {/* ── MAIN ── */}
       <main className="ed-main">
         <div className="ed-space">
-
           {/* ── STAT CARDS ── */}
           <section className="ed-stats-grid">
             {jobStats.map(({ label, value, subtext, icon: Icon }) => (
@@ -457,21 +548,25 @@ const EmployerDashboard = () => {
 
           {/* ── CONTENT GRID ── */}
           <div className="ed-content-grid">
-
             {/* LEFT — Jobs + Applications */}
             <div className="ed-col-main">
-
               {/* Job Postings */}
               <div className="ed-card">
                 <div className="ed-card-header">
                   <div>
                     <div className="ed-card-title">Your Job Postings</div>
-                    <div className="ed-card-sub">Overview of recent jobs and their application funnel.</div>
+                    <div className="ed-card-sub">
+                      Overview of recent jobs and their application funnel.
+                    </div>
                   </div>
                   <div className="ed-search-row">
                     <div className="ed-search-wrap">
                       <Search />
-                      <input className="ed-search-input" type="text" placeholder="Search jobs..." />
+                      <input
+                        className="ed-search-input"
+                        type="text"
+                        placeholder="Search jobs..."
+                      />
                     </div>
                     <button className="ed-filter-btn">
                       <Filter style={{ width: 14, height: 14 }} /> Filters
@@ -479,43 +574,71 @@ const EmployerDashboard = () => {
                   </div>
                 </div>
 
-                {recentJobs.length > 0 && recentJobs.map((job, idx) => (
-                  <div key={job._id} className="ed-job-row">
-                    <div className="ed-job-row-inner">
-                      <div style={{ flex: 1 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "6px" }}>
-                          <span className="ed-job-num">{idx + 1}</span>
-                          <span className="ed-job-title">{job.title}</span>
+                {recentJobs.length > 0 &&
+                  recentJobs.map((job, idx) => (
+                    <div key={job._id} className="ed-job-row">
+                      <div className="ed-job-row-inner">
+                        <div style={{ flex: 1 }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.6rem",
+                              marginBottom: "6px",
+                            }}
+                          >
+                            <span className="ed-job-num">{idx + 1}</span>
+                            <span className="ed-job-title">{job.title}</span>
+                          </div>
+                          <div className="ed-job-meta">
+                            <span className="ed-job-loc">
+                              <MapPin /> {job?.locationText}
+                            </span>
+                            <span className="ed-job-tag">{job.category}</span>
+                          </div>
                         </div>
-                        <div className="ed-job-meta">
-                          <span className="ed-job-loc">
-                            <MapPin /> {job?.locationText}
-                          </span>
-                          <span className="ed-job-tag">{job.category}</span>
-                        </div>
-                      </div>
-                      <div className="ed-job-stats">
-                        <div style={{ textAlign: "center" }}>
-                          <div className="ed-job-stat-num">{job.applications}</div>
-                          <div className="ed-job-stat-label">Applications</div>
-                        </div>
-                        <div style={{ textAlign: "center" }}>
-                          <div className="ed-job-stat-num" style={{ color: "var(--neon-green)" }}>{job.hired}</div>
-                          <div className="ed-job-stat-label">Hired</div>
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                          <span className={statusClass(job.status)}>{job.status}</span>
-                          <button className="ed-link-btn">
-                            View <ArrowRight style={{ width: 14, height: 14 }} />
-                          </button>
+                        <div className="ed-job-stats">
+                          <div style={{ textAlign: "center" }}>
+                            <div className="ed-job-stat-num">
+                              {job.applications}
+                            </div>
+                            <div className="ed-job-stat-label">
+                              Applications
+                            </div>
+                          </div>
+                          <div style={{ textAlign: "center" }}>
+                            <div
+                              className="ed-job-stat-num"
+                              style={{ color: "var(--neon-green)" }}
+                            >
+                              {job.hired}
+                            </div>
+                            <div className="ed-job-stat-label">Hired</div>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "6px",
+                            }}
+                          >
+                            <span className={statusClass(job.status)}>
+                              {job.status}
+                            </span>
+                            <button className="ed-link-btn">
+                              View{" "}
+                              <ArrowRight style={{ width: 14, height: 14 }} />
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
 
                 <div className="ed-card-footer">
-                  <span className="ed-card-footer-text">Showing {recentJobs.length} recent job postings</span>
+                  <span className="ed-card-footer-text">
+                    Showing {recentJobs.length} recent job postings
+                  </span>
                   <button className="ed-link-btn">View all jobs →</button>
                 </div>
               </div>
@@ -525,15 +648,25 @@ const EmployerDashboard = () => {
                 <div className="ed-card-header">
                   <div>
                     <div className="ed-card-title">Recent Applications</div>
-                    <div className="ed-card-sub">Latest candidates across your open jobs.</div>
+                    <div className="ed-card-sub">
+                      Latest candidates across your open jobs.
+                    </div>
                   </div>
                   <button className="ed-link-btn">View all</button>
                 </div>
                 <div className="ed-app-list">
                   {recentApplications.map((app) => (
                     <div key={app.name + app.role} className="ed-app-item">
-                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                        <div className="ed-app-avatar">{app.name.split(" ")[0][0]}</div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.75rem",
+                        }}
+                      >
+                        <div className="ed-app-avatar">
+                          {app.name.split(" ")[0][0]}
+                        </div>
                         <div>
                           <div className="ed-app-name">{app.name}</div>
                           <div className="ed-app-role">{app.role}</div>
@@ -541,7 +674,9 @@ const EmployerDashboard = () => {
                         </div>
                       </div>
                       <div style={{ textAlign: "right" }}>
-                        <span className={stageClass(app.stage)}>{app.stage}</span>
+                        <span className={stageClass(app.stage)}>
+                          {app.stage}
+                        </span>
                         <div className="ed-app-time">{app.appliedAt}</div>
                       </div>
                     </div>
@@ -552,13 +687,14 @@ const EmployerDashboard = () => {
 
             {/* RIGHT — Payments + Activity + CTA */}
             <div className="ed-col-side">
-
               {/* Payments */}
               <div className="ed-card">
                 <div className="ed-card-header">
                   <div>
                     <div className="ed-card-title">Payments Overview</div>
-                    <div className="ed-card-sub">Track payouts and hiring spend.</div>
+                    <div className="ed-card-sub">
+                      Track payouts and hiring spend.
+                    </div>
                   </div>
                   <button className="ed-link-btn">
                     View all <ArrowUpRight style={{ width: 14, height: 14 }} />
@@ -577,24 +713,44 @@ const EmployerDashboard = () => {
                     <div className="ed-pay-next-label">
                       <Clock style={{ width: 12, height: 12 }} /> Next payout
                     </div>
-                    <div className="ed-pay-next-date">{paymentSummary.nextPayoutDate}</div>
-                    <div className="ed-pay-next-amt">{paymentSummary.upcomingPayout}</div>
+                    <div className="ed-pay-next-date">
+                      {paymentSummary.nextPayoutDate}
+                    </div>
+                    <div className="ed-pay-next-amt">
+                      {paymentSummary.upcomingPayout}
+                    </div>
                   </div>
                 </div>
 
                 <div className="ed-pay-list">
                   {recentPayments.map((pay) => (
                     <div key={pay.id} className="ed-pay-item">
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: "0.65rem" }}>
-                        <div className="ed-pay-icon"><CreditCard /></div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: "0.65rem",
+                        }}
+                      >
+                        <div className="ed-pay-icon">
+                          <CreditCard />
+                        </div>
                         <div>
                           <div className="ed-pay-purpose">{pay.purpose}</div>
-                          <div className="ed-pay-meta">{pay.id} · {pay.method} · {pay.date}</div>
+                          <div className="ed-pay-meta">
+                            {pay.id} · {pay.method} · {pay.date}
+                          </div>
                         </div>
                       </div>
                       <div>
                         <div className="ed-pay-amount">{pay.amount}</div>
-                        <span className={pay.status === "Completed" ? "ed-status-completed" : "ed-status-processing"}>
+                        <span
+                          className={
+                            pay.status === "Completed"
+                              ? "ed-status-completed"
+                              : "ed-status-processing"
+                          }
+                        >
                           {pay.status}
                         </span>
                       </div>
@@ -614,15 +770,19 @@ const EmployerDashboard = () => {
                     <div key={i} className="ed-activity-item">
                       <div className="ed-activity-icon-col">
                         <div className={`ed-activity-icon ${item.type}`}>
-                          {item.type === "job"     && <Briefcase />}
-                          {item.type === "hire"    && <CheckCircle2 />}
+                          {item.type === "job" && <Briefcase />}
+                          {item.type === "hire" && <CheckCircle2 />}
                           {item.type === "payment" && <Wallet />}
                         </div>
-                        {i !== recentActivity.length - 1 && <div className="ed-activity-line" />}
+                        {i !== recentActivity.length - 1 && (
+                          <div className="ed-activity-line" />
+                        )}
                       </div>
                       <div>
                         <div className="ed-activity-title">{item.title}</div>
-                        <div className="ed-activity-desc">{item.description}</div>
+                        <div className="ed-activity-desc">
+                          {item.description}
+                        </div>
                         <div className="ed-activity-time">{item.time}</div>
                       </div>
                     </div>
@@ -634,21 +794,23 @@ const EmployerDashboard = () => {
               <div className="ed-cta-card">
                 <div className="ed-cta-orb ed-cta-orb-1" />
                 <div className="ed-cta-orb ed-cta-orb-2" />
-                <div className="ed-cta-title">Want to hire faster with verified workers?</div>
+                <div className="ed-cta-title">
+                  Want to hire faster with verified workers?
+                </div>
                 <div className="ed-cta-desc">
-                  Boost your job visibility and get more applications from trusted workers in your area.
+                  Boost your job visibility and get more applications from
+                  trusted workers in your area.
                 </div>
                 <button className="ed-cta-btn">
                   <TrendingUp style={{ width: 15, height: 15 }} />
                   Explore Boost Options
                 </button>
               </div>
-
             </div>
           </div>
 
           <div className="ed-footer">
-            © {new Date().getFullYear()} KaamSetu • Employer Dashboard
+            © {new Date().getFullYear()} Karigar • Employer Dashboard
           </div>
         </div>
       </main>

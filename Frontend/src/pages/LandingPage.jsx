@@ -1,10 +1,8 @@
-
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Footer from '../components/layouts/Footer'
+import Footer from "../components/layouts/Footer";
 import { listJobs } from "../store/slices/jobSlice";
-
 
 const globalCSS = `
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap');
@@ -450,14 +448,49 @@ const globalCSS = `
 `;
 
 const CATEGORIES = [
-  { icon: "🌾", name: "Agriculture", count: "320 jobs", bg: "rgba(0,255,179,0.1)" },
-  { icon: "🏗️", name: "Construction", count: "218 jobs", bg: "rgba(0,200,255,0.1)" },
-  { icon: "🚚", name: "Transport", count: "145 jobs", bg: "rgba(176,109,255,0.1)" },
-  { icon: "🍳", name: "Domestic", count: "189 jobs", bg: "rgba(255,165,0,0.1)" },
-  { icon: "🔧", name: "Repairs", count: "97 jobs", bg: "rgba(255,100,100,0.1)" },
-  { icon: "💊", name: "Healthcare", count: "62 jobs", bg: "rgba(0,255,179,0.1)" },
+  {
+    icon: "🌾",
+    name: "Agriculture",
+    count: "320 jobs",
+    bg: "rgba(0,255,179,0.1)",
+  },
+  {
+    icon: "🏗️",
+    name: "Construction",
+    count: "218 jobs",
+    bg: "rgba(0,200,255,0.1)",
+  },
+  {
+    icon: "🚚",
+    name: "Transport",
+    count: "145 jobs",
+    bg: "rgba(176,109,255,0.1)",
+  },
+  {
+    icon: "🍳",
+    name: "Domestic",
+    count: "189 jobs",
+    bg: "rgba(255,165,0,0.1)",
+  },
+  {
+    icon: "🔧",
+    name: "Repairs",
+    count: "97 jobs",
+    bg: "rgba(255,100,100,0.1)",
+  },
+  {
+    icon: "💊",
+    name: "Healthcare",
+    count: "62 jobs",
+    bg: "rgba(0,255,179,0.1)",
+  },
   { icon: "🎓", name: "Teaching", count: "44 jobs", bg: "rgba(0,200,255,0.1)" },
-  { icon: "🏪", name: "Retail", count: "113 jobs", bg: "rgba(176,109,255,0.1)" },
+  {
+    icon: "🏪",
+    name: "Retail",
+    count: "113 jobs",
+    bg: "rgba(176,109,255,0.1)",
+  },
 ];
 
 //   {
@@ -516,12 +549,48 @@ const TRENDING = [
 ];
 
 const TRUST = [
-  { icon: "✅", bg: "rgba(0,255,179,0.1)", color: "var(--neon-green)", title: "Verified Employers", desc: "Every employer is KYC-verified before they can post jobs. Zero scams, guaranteed." },
-  { icon: "💳", bg: "rgba(0,200,255,0.1)", color: "var(--neon-blue)", title: "Secure Payments", desc: "Wages are tracked and dispute-protected. You get paid what was agreed." },
-  { icon: "⚖️", bg: "rgba(176,109,255,0.1)", color: "var(--neon-purple)", title: "Fair Mediation", desc: "Trained mediators resolve conflicts between workers and employers fairly." },
-  { icon: "📍", bg: "rgba(255,165,0,0.12)", color: "#ffaa44", title: "Local First", desc: "Jobs are shown by distance. Find work within walking distance of your home." },
-  { icon: "⭐", bg: "rgba(255,100,100,0.1)", color: "#ff7070", title: "Ratings System", desc: "Both workers and employers rate each other after every job. Stay accountable." },
-  { icon: "🤝", bg: "rgba(0,255,179,0.1)", color: "var(--neon-green)", title: "One-tap Apply", desc: "No paperwork. Apply in seconds with your verified profile, get hired today." },
+  {
+    icon: "✅",
+    bg: "rgba(0,255,179,0.1)",
+    color: "var(--neon-green)",
+    title: "Verified Employers",
+    desc: "Every employer is KYC-verified before they can post jobs. Zero scams, guaranteed.",
+  },
+  {
+    icon: "💳",
+    bg: "rgba(0,200,255,0.1)",
+    color: "var(--neon-blue)",
+    title: "Secure Payments",
+    desc: "Wages are tracked and dispute-protected. You get paid what was agreed.",
+  },
+  {
+    icon: "⚖️",
+    bg: "rgba(176,109,255,0.1)",
+    color: "var(--neon-purple)",
+    title: "Fair Mediation",
+    desc: "Trained mediators resolve conflicts between workers and employers fairly.",
+  },
+  {
+    icon: "📍",
+    bg: "rgba(255,165,0,0.12)",
+    color: "#ffaa44",
+    title: "Local First",
+    desc: "Jobs are shown by distance. Find work within walking distance of your home.",
+  },
+  {
+    icon: "⭐",
+    bg: "rgba(255,100,100,0.1)",
+    color: "#ff7070",
+    title: "Ratings System",
+    desc: "Both workers and employers rate each other after every job. Stay accountable.",
+  },
+  {
+    icon: "🤝",
+    bg: "rgba(0,255,179,0.1)",
+    color: "var(--neon-green)",
+    title: "One-tap Apply",
+    desc: "No paperwork. Apply in seconds with your verified profile, get hired today.",
+  },
 ];
 
 // ── COUNTDOWN HOOK ────────────────────────────────────────────────────────
@@ -540,7 +609,7 @@ function useCountdown(initialSeconds) {
 export default function LandingPage() {
   // Inject global CSS once
   useEffect(() => {
-    const styleId = "worklink-global-styles";
+    const styleId = "Karigar-global-styles";
     if (!document.getElementById(styleId)) {
       const el = document.createElement("style");
       el.id = styleId;
@@ -557,7 +626,6 @@ export default function LandingPage() {
   const [addedJobs, setAddedJobs] = useState({});
   const [nlEmail, setNlEmail] = useState("");
   const [nlDone, setNlDone] = useState(false);
-  
 
   const handleAdd = (id) => {
     setAddedJobs((prev) => ({ ...prev, [id]: true }));
@@ -575,17 +643,21 @@ export default function LandingPage() {
   const dispatch = useDispatch();
   const { jobs = [], loading } = useSelector((state) => state.job);
 
-// fetch jobs from backend
+  // fetch jobs from backend
   useEffect(() => {
     dispatch(listJobs());
   }, [dispatch]);
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg-base)", color: "var(--text)" }}>
-
+    <main
+      style={{
+        minHeight: "100vh",
+        background: "var(--bg-base)",
+        color: "var(--text)",
+      }}
+    >
       <section className="wl-hero">
         <div className="wl-hero-bg">
-
           {/* Scrolling image strips */}
           <div className="wl-img-strips">
             {/* Row 1 — left to right */}
@@ -605,7 +677,13 @@ export default function LandingPage() {
                 "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=440&h=300&fit=crop",
                 "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=440&h=300&fit=crop",
               ].map((src, i) => (
-                <img key={i} src={src} alt="" className="wl-strip-img" draggable="false" />
+                <img
+                  key={i}
+                  src={src}
+                  alt=""
+                  className="wl-strip-img"
+                  draggable="false"
+                />
               ))}
             </div>
 
@@ -625,7 +703,13 @@ export default function LandingPage() {
                 "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=440&h=300&fit=crop",
                 "https://images.unsplash.com/photo-1504198322253-cfa87a0ff25f?w=440&h=300&fit=crop",
               ].map((src, i) => (
-                <img key={i} src={src} alt="" className="wl-strip-img" draggable="false" />
+                <img
+                  key={i}
+                  src={src}
+                  alt=""
+                  className="wl-strip-img"
+                  draggable="false"
+                />
               ))}
             </div>
 
@@ -645,7 +729,13 @@ export default function LandingPage() {
                 "https://images.unsplash.com/photo-1511884642898-4c92249e20b6?w=440&h=300&fit=crop",
                 "https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=440&h=300&fit=crop",
               ].map((src, i) => (
-                <img key={i} src={src} alt="" className="wl-strip-img" draggable="false" />
+                <img
+                  key={i}
+                  src={src}
+                  alt=""
+                  className="wl-strip-img"
+                  draggable="false"
+                />
               ))}
             </div>
           </div>
@@ -664,31 +754,44 @@ export default function LandingPage() {
             Trusted by 8,500+ Workers across India
           </div>
           <h1>
-            Empowering Rural Workers,<br />
+            Empowering Rural Workers,
+            <br />
             <span className="wl-grad-text">Building Tomorrow</span>
           </h1>
           <p>
-            Find verified nearby jobs, apply instantly, and resolve disputes through our fair
-            mediation system — trusted, local, and transparent.
+            Find verified nearby jobs, apply instantly, and resolve disputes
+            through our fair mediation system — trusted, local, and transparent.
           </p>
           <div className="wl-hero-ctas">
             <Link to="/jobpage" className="wl-btn-primary">
               Find Jobs
-              <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                viewBox="0 0 24 24"
+              >
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </Link>
-            <Link to="/jobpost" className="wl-btn-outline">Post a Job</Link>
+            <Link to="/jobpost" className="wl-btn-outline">
+              Post a Job
+            </Link>
           </div>
           <div className="wl-hero-stats">
-            {[["1.2K+", "Active Jobs"], ["8.5K+", "Workers"], ["500+", "Employers"], ["98%", "Success Rate"]].map(
-              ([num, label]) => (
-                <div key={label} style={{ textAlign: "center" }}>
-                  <div className="wl-stat-num">{num}</div>
-                  <div className="wl-stat-label">{label}</div>
-                </div>
-              )
-            )}
+            {[
+              ["1.2K+", "Active Jobs"],
+              ["8.5K+", "Workers"],
+              ["500+", "Employers"],
+              ["98%", "Success Rate"],
+            ].map(([num, label]) => (
+              <div key={label} style={{ textAlign: "center" }}>
+                <div className="wl-stat-num">{num}</div>
+                <div className="wl-stat-label">{label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -697,16 +800,30 @@ export default function LandingPage() {
       <div className="wl-flash-banner">
         <div className="wl-flash-label">⚡ FLASH HIRING EVENT</div>
         <div className="wl-flash-msg">
-          <strong>50+ new jobs</strong> posted this morning — apply before they fill up!
+          <strong>50+ new jobs</strong> posted this morning — apply before they
+          fill up!
         </div>
         <div className="wl-countdown">
-          <div className="wl-cd-block"><span className="wl-cd-num">{h}</span><span className="wl-cd-unit">HRS</span></div>
+          <div className="wl-cd-block">
+            <span className="wl-cd-num">{h}</span>
+            <span className="wl-cd-unit">HRS</span>
+          </div>
           <span className="wl-cd-sep">:</span>
-          <div className="wl-cd-block"><span className="wl-cd-num">{m}</span><span className="wl-cd-unit">MIN</span></div>
+          <div className="wl-cd-block">
+            <span className="wl-cd-num">{m}</span>
+            <span className="wl-cd-unit">MIN</span>
+          </div>
           <span className="wl-cd-sep">:</span>
-          <div className="wl-cd-block"><span className="wl-cd-num">{s}</span><span className="wl-cd-unit">SEC</span></div>
+          <div className="wl-cd-block">
+            <span className="wl-cd-num">{s}</span>
+            <span className="wl-cd-unit">SEC</span>
+          </div>
         </div>
-        <Link to="/jobpage" className="wl-btn-primary" style={{ padding: "9px 20px", fontSize: "13px" }}>
+        <Link
+          to="/jobpage"
+          className="wl-btn-primary"
+          style={{ padding: "9px 20px", fontSize: "13px" }}
+        >
           Browse Now →
         </Link>
       </div>
@@ -717,12 +834,16 @@ export default function LandingPage() {
           <div className="wl-section-header">
             <div className="wl-section-tag">Explore</div>
             <div className="wl-section-title">Browse by Category</div>
-            <div className="wl-section-sub">Find work that matches your skills and location</div>
+            <div className="wl-section-sub">
+              Find work that matches your skills and location
+            </div>
           </div>
           <div className="wl-cat-grid">
             {CATEGORIES.map((cat) => (
               <a href="#" key={cat.name} className="wl-cat-card">
-                <div className="wl-cat-icon" style={{ background: cat.bg }}>{cat.icon}</div>
+                <div className="wl-cat-icon" style={{ background: cat.bg }}>
+                  {cat.icon}
+                </div>
                 <div className="wl-cat-name">{cat.name}</div>
                 <div className="wl-cat-count">{cat.count}</div>
               </a>
@@ -737,67 +858,70 @@ export default function LandingPage() {
           <div className="wl-section-header">
             <div className="wl-section-tag">Featured</div>
             <div className="wl-section-title">Top Jobs Near You</div>
-            <div className="wl-section-sub">Hand-picked opportunities within your reach</div>
+            <div className="wl-section-sub">
+              Hand-picked opportunities within your reach
+            </div>
           </div>
-      
+
           <div className="wl-prod-grid">
-              {loading ? (
-                <p>Loading jobs...</p>
-              ) : jobs.length === 0 ? (
-                <p>No jobs available</p>
-              ) : (
-                jobs.slice(0, 6).map((job) => (
-                  <div key={job._id} className="wl-prod-card">
-                    
-                    <div
-                      className="wl-prod-img"
-                      style={{ background: "linear-gradient(135deg, #0f2217, #1a3a27)" }}
-                    >
-                      🛠️
-                      <span className="wl-prod-badge wl-badge-new">LIVE</span>
+            {loading ? (
+              <p>Loading jobs...</p>
+            ) : jobs.length === 0 ? (
+              <p>No jobs available</p>
+            ) : (
+              jobs.slice(0, 6).map((job) => (
+                <div key={job._id} className="wl-prod-card">
+                  <div
+                    className="wl-prod-img"
+                    style={{
+                      background: "linear-gradient(135deg, #0f2217, #1a3a27)",
+                    }}
+                  >
+                    🛠️
+                    <span className="wl-prod-badge wl-badge-new">LIVE</span>
+                  </div>
+
+                  <div className="wl-prod-body">
+                    <div className="wl-prod-category">
+                      {job.category} · {job.locationText}
                     </div>
 
-                    <div className="wl-prod-body">
-                      <div className="wl-prod-category">
-                        {job.category} · {job.locationText}
-                      </div>
+                    <div className="wl-prod-name">{job.title}</div>
 
-                      <div className="wl-prod-name">{job.title}</div>
+                    <div className="wl-prod-rating">
+                      <span className="wl-stars">★★★★★</span>
+                      <span className="wl-rating-count">
+                        {job.employer?.name || "Employer"}
+                      </span>
+                    </div>
 
-                      <div className="wl-prod-rating">
-                        <span className="wl-stars">★★★★★</span>
-                        <span className="wl-rating-count">
-                          {job.employer?.name || "Employer"}
+                    <div className="wl-prod-footer">
+                      <div>
+                        <span
+                          className="wl-prod-price"
+                          style={{ color: "var(--neon-green)" }}
+                        >
+                          ₹{job.salaryMax || job.wage || 0}
+                        </span>
+                        <span className="wl-price-old">
+                          / {job.payFrequency || "day"}
                         </span>
                       </div>
 
-                      <div className="wl-prod-footer">
-                        <div>
-                          <span
-                            className="wl-prod-price"
-                            style={{ color: "var(--neon-green)" }}
-                          >
-                            ₹{job.salaryMax || job.wage || 0}
-                          </span>
-                          <span className="wl-price-old">
-                            / {job.payFrequency || "day"}
-                          </span>
-                        </div>
-
-                        <button
-                          className={`wl-btn-add ${
-                            addedJobs[job._id] ? "added" : ""
-                          }`}
-                          onClick={() => handleAdd(job._id)}
-                        >
-                          {addedJobs[job._id] ? "✓" : "+"}
-                        </button>
-                      </div>
+                      <button
+                        className={`wl-btn-add ${
+                          addedJobs[job._id] ? "added" : ""
+                        }`}
+                        onClick={() => handleAdd(job._id)}
+                      >
+                        {addedJobs[job._id] ? "✓" : "+"}
+                      </button>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
       </section>
 
@@ -807,7 +931,9 @@ export default function LandingPage() {
           <div className="wl-section-header">
             <div className="wl-section-tag">Trending Now</div>
             <div className="wl-section-title">Most Applied This Week</div>
-            <div className="wl-section-sub">See what workers are grabbing fast</div>
+            <div className="wl-section-sub">
+              See what workers are grabbing fast
+            </div>
           </div>
           <div className="wl-trend-grid">
             {TRENDING.map((item, i) => (
@@ -817,7 +943,9 @@ export default function LandingPage() {
                   <div className="wl-trend-name">{item.name}</div>
                   <div className="wl-trend-price">{item.price}</div>
                 </div>
-                <div className="wl-trend-rank">{String(i + 1).padStart(2, "0")}</div>
+                <div className="wl-trend-rank">
+                  {String(i + 1).padStart(2, "0")}
+                </div>
               </div>
             ))}
           </div>
@@ -825,16 +953,25 @@ export default function LandingPage() {
       </section>
 
       {/* ── TRUST FEATURES ── */}
-      <section id="features" className="wl-section-pad" style={{ paddingTop: 0 }}>
+      <section
+        id="features"
+        className="wl-section-pad"
+        style={{ paddingTop: 0 }}
+      >
         <div className="wl-container">
           <div className="wl-section-header">
-            <div className="wl-section-tag">Why WorkLink</div>
+            <div className="wl-section-tag">Why Karigar</div>
             <div className="wl-section-title">Built for Trust</div>
           </div>
           <div className="wl-trust-grid">
             {TRUST.map((t) => (
               <div key={t.title} className="wl-trust-card">
-                <div className="wl-trust-icon" style={{ background: t.bg, color: t.color }}>{t.icon}</div>
+                <div
+                  className="wl-trust-icon"
+                  style={{ background: t.bg, color: t.color }}
+                >
+                  {t.icon}
+                </div>
                 <div className="wl-trust-title">{t.title}</div>
                 <div className="wl-trust-desc">{t.desc}</div>
               </div>
@@ -849,7 +986,9 @@ export default function LandingPage() {
           <div className="wl-newsletter">
             <div className="wl-section-tag">Stay Ahead</div>
             <div className="wl-nl-title">Get Job Alerts Instantly</div>
-            <div className="wl-nl-sub">Subscribe and be the first to know about new jobs near you.</div>
+            <div className="wl-nl-sub">
+              Subscribe and be the first to know about new jobs near you.
+            </div>
             <div className="wl-nl-form">
               <input
                 className="wl-nl-input"
@@ -861,19 +1000,27 @@ export default function LandingPage() {
               <button
                 className="wl-nl-btn"
                 onClick={handleSubscribe}
-                style={nlDone ? { background: "linear-gradient(135deg, var(--neon-green), #00a0cc)" } : {}}
+                style={
+                  nlDone
+                    ? {
+                        background:
+                          "linear-gradient(135deg, var(--neon-green), #00a0cc)",
+                      }
+                    : {}
+                }
               >
                 {nlDone ? "✓ Subscribed!" : "Subscribe"}
               </button>
             </div>
-            <div className="wl-nl-hint">No spam. Unsubscribe anytime. 6,200+ workers already subscribed.</div>
+            <div className="wl-nl-hint">
+              No spam. Unsubscribe anytime. 6,200+ workers already subscribed.
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-     <Footer/>
-
+      <Footer />
     </main>
   );
 }

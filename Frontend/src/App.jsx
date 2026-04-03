@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { checkAuth } from './store/slices/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import LandingPage from './pages/LandingPage';
@@ -9,7 +9,6 @@ import EmployerDashboard from './pages/EmployerDashboard';
 import AboutPage from './pages/AboutPage';
 import Jobs from './pages/Jobs';
 import JobDetails from './pages/JobDetails';
-import JobPost from './pages/JobPost';
 import ProfilePage from './pages/ProfilePage';
 import ContactPage from './components/ContactPage';
 import Applications from './components/Applications';
@@ -18,7 +17,9 @@ import ApplicationForm from './components/ApplicationForm';
 import JobPage from './pages/JobPage';
 import FeaturesPage from './pages/FeaturesPage';
 import FAQ from './pages/FAQ';
-import HowItWorks from './components/HowitWork'
+import HowItWorks from './components/HowitWork';
+import CreateJobPage from './pages/CreateJobPage';
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -26,11 +27,9 @@ import {
   Navigate,
 } from 'react-router-dom';
 
-
 function App() {
-
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector(state=>state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(checkAuth());
@@ -38,78 +37,68 @@ function App() {
 
   return (
     <Router>
-      <HeaderSwitcher/>
+      <HeaderSwitcher />
       <Routes>
-        <Route path="/" element={<LandingPage />}></Route>
-       
-        <Route path="/login"
+        <Route path="/" element={<LandingPage />} />
+
+        <Route
+          path="/login"
           element={isAuthenticated ? <Navigate to="/" /> : <Login />}
-        ></Route>
+        />
 
-        <Route path="/signup"
+        <Route
+          path="/signup"
           element={isAuthenticated ? <Navigate to="/" /> : <Signup />}
-        ></Route>
+        />
 
-        <Route path="/user/dashboard" 
-          element={isAuthenticated ? <EmployerDashboard/> : <Signup />} 
-        ></Route>
-        <Route path="/user/profile"
-          element={isAuthenticated ? <ProfilePage/> : <Navigate to="/login" />}
-        ></Route>
+        <Route
+          path="/user/dashboard"
+          element={isAuthenticated ? <EmployerDashboard /> : <Signup />}
+        />
 
-        <Route path="/featurespage"
-          element={<FeaturesPage/>}
-        ></Route>
+        <Route
+          path="/user/profile"
+          element={isAuthenticated ? <ProfilePage /> : <Navigate to="/login" />}
+        />
 
-        <Route path="/aboutpage"
-          element={<AboutPage/>}
-        ></Route>
+        <Route path="/featurespage" element={<FeaturesPage />} />
 
-        <Route path="/jobspage"
-          element={isAuthenticated ? <Jobs/> : <Navigate to="/login" />}
-        ></Route>
+        <Route path="/aboutpage" element={<AboutPage />} />
 
-        <Route path="/jobsdetails"
-          element={<JobDetails/>}
-        ></Route>
+        <Route
+          path="/jobspage"
+          element={isAuthenticated ? <Jobs /> : <Navigate to="/login" />}
+        />
 
-        <Route path="/jobpost"
-          element={isAuthenticated ? <JobPost/> : <Navigate to="/login"/>}
-        ></Route>
+        <Route path="/jobsdetails" element={<JobDetails />} />
 
-        {/* <Route
-          path="/disputes"
-          element={<Disputes/>}
-        ></Route> */}
+        {/* ✅ Updated Route */}
+        <Route
+          path="/jobpost"
+          element={
+            isAuthenticated ? <CreateJobPage /> : <Navigate to="/login" />
+          }
+        />
 
-         <Route path="/contactpage"
-          element={<ContactPage/>}
-        ></Route>
+        <Route path="/contactpage" element={<ContactPage />} />
 
-        <Route path="/applicationform"
-          element={isAuthenticated ? <ApplicationForm/> : <Navigate to="/login" />}
-        ></Route>
+        <Route
+          path="/applicationform"
+          element={
+            isAuthenticated ? <ApplicationForm /> : <Navigate to="/login" />
+          }
+        />
 
-        
+        <Route path="/application" element={<Applications />} />
 
-        <Route path="/application"
-          element={ <Applications/> }
-        ></Route>
+        <Route path="/jobpage" element={<JobPage />} />
 
-        <Route path="/jobpage"
-          element={ <JobPage/> }
-        ></Route>
+        <Route path="/faq" element={<FAQ />} />
 
-        <Route path="/faq"
-          element={<FAQ/>}
-        ></Route>
-
-         <Route path="/howitwork"
-          element={<HowItWorks/>}
-        ></Route>
+        <Route path="/howitwork" element={<HowItWorks />} />
       </Routes>
     </Router>
   );
 }
 
-export default App
+export default App;
