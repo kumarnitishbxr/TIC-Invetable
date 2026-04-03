@@ -1,160 +1,312 @@
-import { validate } from '../Utils/Validate.js'
-import jwt from 'jsonwebtoken'
-import User from '../models/user.model.js'
-import bcrypt from 'bcrypt';
-import redisClient from '../config/redis.config.js';
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import User from "../models/user.model.js";
+import redisClient from "../config/redis.config.js";
+import { validate } from "../utils/Validate.js";
+import { normaliseCoordinates } from "../utils/platform.utils.js";
+import { buildPublicUser } from "../utils/user.utils.js";
+
+const getCookieOptions = () => {
+    const maxAge = Number(process.env.JWT_MAX_AGE || 0);
+
+    return {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        ...(Number.isFinite(maxAge) && maxAge > 0 ? { maxAge } : {}),
+    };
+};
+
+const createToken = (user) => {
+    if (!process.env.SECRET_KEY || !process.env.JWT_EXP) {
+        throw new Error("JWT configuration missing");
+    }
+
+    return jwt.sign(
+        {
+            _id: user._id,
+            role: user.role,
+            activeMode: user.activeMode,
+            emailId: user.emailId,
+        },
+        process.env.SECRET_KEY,
+        { expiresIn: process.env.JWT_EXP },
+    );
+};
 
 export const Register = async (req, res) => {
-    try{
-        const { emailId, password, contact, Name} = req.body;
+    try {
+        const {
+            emailId,
+            password,
+            contact,
+            Name,
+            preferredLanguage = "Hindi",
+            languages = ["Hindi"],
+            activeMode = "customer",
+            upiId = "",
+            location,
+            locationText = "",
+            workerProfile = {},
+        } = req.body;
 
-        if(!emailId || !password || !contact || !Name) {
+        if (!emailId || !password || !contact || !Name) {
             return res.status(400).json({
                 success: false,
-                message: "All required fields must be provided"
-            })
+                message: "All required fields must be provided",
+            });
         }
 
-        const existingUser = await User.findOne({emailId});
+        const existingUser = await User.findOne({
+            $or: [{ emailId: String(emailId).trim().toLowerCase() }, { contact: String(contact).trim() }],
+        });
 
-        if(existingUser) return res.status(400).json({
-            success: false,
-            message: "User already exists."
-        })
-
-        const result = validate(req.body);
-        if(!result.success) return res.status(500).json({
-            message: result.message
-        })
-
-        req.body.password = await bcrypt.hash(password, 12);
-
-        if(!process.env.SECRET_KEY || !process.env.JWT_EXP){
-            throw new Error('JWT configuration missing');
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: "User already exists.",
+            });
         }
 
-        const user = await User.create(req.body);
+        const result = validate({ emailId, password, contact });
+        if (!result.success) {
+            return res.status(400).json({
+                success: false,
+                message: result.message,
+            });
+        }
 
-        const Token = jwt.sign({_id: user._id, role: user.role, emailId: user.emailId},process.env.SECRET_KEY,
-        {expiresIn: process.env.JWT_EXP})
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const geoPoint = normaliseCoordinates(location);
 
-        res.status(201).json({
-            Token,
+        const user = await User.create({
+            Name: String(Name).trim(),
+            emailId: String(emailId).trim().toLowerCase(),
+            password: hashedPassword,
+            contact: String(contact).trim(),
+            preferredLanguage,
+            languages: Array.isArray(languages) && languages.length ? languages : ["Hindi"],
+            availableModes: ["customer", "worker"],
+            activeMode: ["customer", "worker"].includes(activeMode) ? activeMode : "customer",
+            upiId: String(upiId || "").trim(),
+            location: geoPoint || undefined,
+            locationText: String(locationText || "").trim(),
+            workerProfile: {
+                ...workerProfile,
+                languages:
+                    Array.isArray(workerProfile.languages) && workerProfile.languages.length
+                        ? workerProfile.languages
+                        : Array.isArray(languages) && languages.length
+                          ? languages
+                          : ["Hindi"],
+            },
+        });
+
+        const Token = createToken(user);
+        res.cookie("Token", Token, getCookieOptions());
+
+        return res.status(201).json({
             success: true,
-            message: 'User registered successfully',
-            userId: user._id,
-            Name: user.Name,
-            emailId: user.emailId,
-            contact: user.contact,
-            role: user.role
-        })
-    }catch(err){
+            message: "User registered successfully",
+            Token,
+            user: buildPublicUser(user),
+        });
+    } catch (err) {
         return res.status(500).json({
-            message: "Register controller error: ",
-            error: err.message
-        })
+            success: false,
+            message: "Register controller error",
+            error: err.message,
+        });
     }
-}
+};
 
 export const Login = async (req, res) => {
+    try {
+        const { emailId, password } = req.body;
 
-   try {
-      const { emailId, password } = req.body;
+        if (!emailId || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "Email and password are required",
+            });
+        }
 
-      if (!emailId || !password) {
-         return res.status(400).json({ 
-            success: false, 
-            message: 'Email and password are required' 
-         });
-      }
-      console.log(emailId, password)
+        const user = await User.findOne({
+            emailId: String(emailId).trim().toLowerCase(),
+        });
 
-      const user = await User.findOne({ emailId });
-      if (!user) {
-         return res.status(401).json({ 
-            success: false, 
-            message: 'Invalid credentials' 
-         });
-      }
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid credentials",
+            });
+        }
 
-      const isMatched = await bcrypt.compare(password, user?.password);
-      if (!isMatched) {
-         return res.status(401).json({ 
-            success: false, 
-            message: 'Invalid credentials-pass' 
-         });
-      }
+        const isMatched = await bcrypt.compare(password, user.password);
+        if (!isMatched) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid credentials",
+            });
+        }
 
+        const Token = createToken(user);
+        res.cookie("Token", Token, getCookieOptions());
 
-      if (!process.env.SECRET_KEY || !process.env.JWT_EXP) {
-         throw new Error('JWT configuration missing');
-      }
-
-      const Token = jwt.sign(
-         { _id: user._id, role: user.role, emailId: user.emailId },
-         process.env.SECRET_KEY,
-         { expiresIn: process.env.JWT_EXP }
-      );
-
-      res.cookie('Token', Token);
-
-      res.status(201).json({
-         Token,
-         success: true,
-         message: 'User logged in successfully',
-         userId: user._id,
-         firstName: user.firstName,
-         lastName: user.lastName,
-         emailId: user.emailId,
-         contact: user.contact,
-         role: user.role,
-      });
-   } catch (error) {
-      return res.status(500).json({
-         success: false,
-         message: 'Login failed',
-         error: error.message,
-      });
-   }
+        return res.status(200).json({
+            success: true,
+            message: "User logged in successfully",
+            Token,
+            user: buildPublicUser(user),
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Login failed",
+            error: error.message,
+        });
+    }
 };
 
 export const Logout = async (req, res) => {
-   try{
-      const {Token} = req.cookies;
-      console.log(Token);
-      if(!Token) return res.status(400).json({success: false, message: "No active sessions"});
+    try {
+        const token = req.token || req.cookies?.Token;
+        if (!token) {
+            return res.status(400).json({
+                success: false,
+                message: "No active session found",
+            });
+        }
 
-      const payload = jwt.decode(Token);
-      if(!payload) return res.status(400).json({message: "Invalid Token"});
+        const payload = jwt.verify(token, process.env.SECRET_KEY);
+        await redisClient.set(`token:blacklist:${token}`, "blocked");
+        await redisClient.expireAt(`token:blacklist:${token}`, payload.exp);
 
-      await redisClient.set(`Token: ${Token}`, 'Blocked');
-      await redisClient.expireAt(`Token: ${Token}`, payload.exp);
+        res.clearCookie("Token", getCookieOptions());
 
-      res.clearCookie('Token');
-
-      return res.status(201).json({
-         success: true,
-         message: "User logged out successfully"
-      })
-   }catch(err){
-      return res.status(500).json({
-         message: "Internal server error",
-         error: err.message
-      })
-   }
+        return res.status(200).json({
+            success: true,
+            message: "User logged out successfully",
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+            error: err.message,
+        });
+    }
 };
 
-export const validUser = async (req, res) => {
-   const reply = {
-      success: true,
-      Name: req.user?.Name,
-      emailId: req.user?.emailId,
-      _id: req.user?._id,
-      role: req.user?.role
-   }
+export const validUser = async (req, res) =>
+    res.status(200).json({
+        success: true,
+        user: buildPublicUser(req.user),
+        message: "Valid user",
+    });
 
-   res.status(200).json({
-      user: reply,
-      message: 'Valid user'
-   })
-}
+export const updateMode = async (req, res) => {
+    const { activeMode } = req.body;
+
+    if (!["customer", "worker"].includes(activeMode)) {
+        return res.status(400).json({
+            success: false,
+            message: "activeMode must be either customer or worker",
+        });
+    }
+
+    if (!req.user.availableModes.includes(activeMode)) {
+        return res.status(403).json({
+            success: false,
+            message: "This mode is not enabled for your account",
+        });
+    }
+
+    req.user.activeMode = activeMode;
+    await req.user.save();
+
+    return res.status(200).json({
+        success: true,
+        message: "App mode updated successfully",
+        user: buildPublicUser(req.user),
+    });
+};
+
+export const updateProfile = async (req, res) => {
+    const {
+        Name,
+        contact,
+        preferredLanguage,
+        languages,
+        upiId,
+        skills,
+        workerProfile,
+        locationText,
+    } = req.body;
+
+    if (Name !== undefined) {
+        req.user.Name = String(Name).trim();
+    }
+
+    if (contact !== undefined) {
+        req.user.contact = String(contact).trim();
+    }
+
+    if (preferredLanguage !== undefined) {
+        req.user.preferredLanguage = String(preferredLanguage).trim();
+    }
+
+    if (Array.isArray(languages) && languages.length) {
+        req.user.languages = languages;
+    }
+
+    if (upiId !== undefined) {
+        req.user.upiId = String(upiId).trim();
+    }
+
+    if (Array.isArray(skills)) {
+        req.user.skills = skills.filter(Boolean);
+    }
+
+    if (locationText !== undefined) {
+        req.user.locationText = String(locationText).trim();
+    }
+
+    if (workerProfile && typeof workerProfile === "object") {
+        req.user.workerProfile = {
+            ...req.user.workerProfile.toObject(),
+            ...workerProfile,
+        };
+    }
+
+    await req.user.save();
+
+    return res.status(200).json({
+        success: true,
+        message: "Profile updated successfully",
+        user: buildPublicUser(req.user),
+    });
+};
+
+export const updateLocation = async (req, res) => {
+    const { coordinates, locationText = "" } = req.body;
+    const geoPoint = normaliseCoordinates(coordinates);
+
+    if (!geoPoint) {
+        return res.status(400).json({
+            success: false,
+            message: "Valid coordinates are required",
+        });
+    }
+
+    req.user.location = geoPoint;
+    req.user.locationText = String(locationText || req.user.locationText || "").trim();
+    req.user.lastKnownLocationAt = new Date();
+
+    await req.user.save();
+
+    return res.status(200).json({
+        success: true,
+        message: "Location updated successfully",
+        user: buildPublicUser(req.user),
+    });
+};

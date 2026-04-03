@@ -1,24 +1,36 @@
-import validator from 'validator'
+import validator from "validator";
 
-export const validate = (data)=>{
-   try {
-      if(!data)
-        throw new Error('Data not present')
+export const validate = (data) => {
+    try {
+        if (!data) {
+            throw new Error("Data not present");
+        }
 
-        const {emailId, password, contact} = data
+        const { emailId, password, contact } = data;
+        const contactValue = String(contact || "").trim();
 
-        if(!validator.isEmail(emailId))
-            throw new Error('Invalid Email')
+        if (!validator.isEmail(String(emailId || "").trim())) {
+            throw new Error("Invalid email");
+        }
 
-        if(!validator.isStrongPassword(password))
-            throw new Error('Weak password')
+        if (
+            !validator.isStrongPassword(String(password || ""), {
+                minLength: 8,
+                minLowercase: 1,
+                minUppercase: 0,
+                minNumbers: 1,
+                minSymbols: 0,
+            })
+        ) {
+            throw new Error("Password must be at least 8 characters and include a number");
+        }
 
-        if(!validator.isMobilePhone(contact))
-            throw new Error('Invalid phone number')
+        if (!validator.isMobilePhone(contactValue, "any")) {
+            throw new Error("Invalid phone number");
+        }
 
-        return {success : true}        
-   } catch (error) {
-        return {success: false, message: error.message}
-   }
-
-}
+        return { success: true };
+    } catch (error) {
+        return { success: false, message: error.message };
+    }
+};
