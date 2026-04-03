@@ -143,4 +143,17 @@ export const logout = async (req, res) => {
    }
 };
 
-export const validUser = async
+export const validUser = async (req, res) => {
+   const reply = {
+      success: true,
+      Name: req.user?.Name,
+      emailId: req.user?.emailId,
+      _id: req.user?._id,
+      role: req.user?.role
+   }
+
+   res.status(200).json({
+      user: reply,
+      message: 'Valid user'
+   })
+}
