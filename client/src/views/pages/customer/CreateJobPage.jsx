@@ -7,6 +7,7 @@ import MotionPage from "../../components/MotionPage.jsx";
 import PageHeader from "../../components/PageHeader.jsx";
 import SectionPanel from "../../components/SectionPanel.jsx";
 import { InputField, SelectField, TextAreaField } from "../../components/FormField.jsx";
+import BrowserLocationField from "../../components/BrowserLocationField.jsx";
 import VoiceComposerField from "../../components/VoiceComposerField.jsx";
 
 const categories = [
@@ -40,8 +41,7 @@ export default function CreateJobPage() {
     rocketMode: false,
     voiceTranscript: "",
     language: "Hindi",
-    latitude: "",
-    longitude: "",
+    coordinates: null,
   });
 
   const [attachedFile, setAttachedFile] = useState(null);
@@ -67,24 +67,27 @@ export default function CreateJobPage() {
     event.preventDefault();
     setSubmitting(true);
     try {
-      const formData = new FormData();
-      formData.append("title", form.title);
-      formData.append("description", form.description);
-      formData.append("category", form.category);
-      formData.append("locationText", form.locationText);
-      formData.append("address", form.address);
-      formData.append("pricingModel", form.pricingModel);
-      formData.append("serviceCode", form.pricingModel === "standard" ? form.serviceCode : "");
-      formData.append("rocketMode", form.rocketMode);
-      formData.append("skills", form.skills);
-      formData.append("voiceInput[transcript]", form.voiceTranscript);
-      formData.append("voiceInput[language]", form.language);
-      formData.append("voiceInput[speakerRole]", "customer");
-      formData.append("coordinates[lat]", form.latitude);
-      formData.append("coordinates[lng]", form.longitude);
-      if (attachedFile) formData.append("attachment", attachedFile);
+      const response = await createJobRequest({
+        title: form.title,
+        description: form.description,
+        category: form.category,
+        locationText: form.locationText,
+        address: form.address,
+        pricingModel: form.pricingModel,
+        serviceCode: form.pricingModel === "standard" ? form.serviceCode : "",
+        rocketMode: form.rocketMode,
+        skills: form.skills
+          .split(",")
+          .map((value) => value.trim())
+          .filter(Boolean),
+        voiceInput: {
+          transcript: form.voiceTranscript,
+          language: form.language,
+          speakerRole: "customer",
+        },
+        coordinates: form.coordinates || undefined,
+      });
 
-      const response = await createJobRequest(formData);
       toast.success("Job created and broadcast");
       navigate(`/app/customer/jobs/${response.data.job._id}`);
     } catch (error) {
@@ -141,16 +144,16 @@ export default function CreateJobPage() {
             onChange={(e) => setForm((c) => ({ ...c, address: e.target.value }))}
           />
 
-          <InputField
-            label="Latitude"
-            value={form.latitude}
-            onChange={(e) => setForm((c) => ({ ...c, latitude: e.target.value }))}
-          />
-          <InputField
-            label="Longitude"
-            value={form.longitude}
-            onChange={(e) => setForm((c) => ({ ...c, longitude: e.target.value }))}
-          />
+          <div className="md:col-span-2">
+            <BrowserLocationField
+              label="Dispatch location"
+              description="Capture your current location so nearby verified workers can be matched automatically. If you skip this, we fall back to any saved profile location."
+              value={form.coordinates}
+              onChange={(coordinates) =>
+                setForm((current) => ({ ...current, coordinates }))
+              }
+            />
+          </div>
 
           <SelectField
             label="Pricing model"

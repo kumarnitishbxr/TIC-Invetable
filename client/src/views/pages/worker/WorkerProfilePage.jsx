@@ -10,6 +10,7 @@ import MotionPage from "../../components/MotionPage.jsx";
 import PageHeader from "../../components/PageHeader.jsx";
 import SectionPanel from "../../components/SectionPanel.jsx";
 import { InputField, TextAreaField } from "../../components/FormField.jsx";
+import BrowserLocationField from "../../components/BrowserLocationField.jsx";
 
 export default function WorkerProfilePage() {
   const { user, refreshSession } = useAppController();
@@ -24,8 +25,7 @@ export default function WorkerProfilePage() {
   const [availabilityForm, setAvailabilityForm] = useState({
     isAvailable: Boolean(user?.workerProfile?.isAvailable),
     serviceRadiusKm: user?.workerProfile?.serviceRadiusKm || 5,
-    lat: "",
-    lng: "",
+    coordinates: null,
     locationText: user?.locationText || "",
   });
 
@@ -53,10 +53,7 @@ export default function WorkerProfilePage() {
       await updateAvailabilityRequest({
         isAvailable: availabilityForm.isAvailable,
         serviceRadiusKm: Number(availabilityForm.serviceRadiusKm),
-        coordinates:
-          availabilityForm.lat && availabilityForm.lng
-            ? { lat: Number(availabilityForm.lat), lng: Number(availabilityForm.lng) }
-            : undefined,
+        coordinates: availabilityForm.coordinates || undefined,
         locationText: availabilityForm.locationText,
       });
       await refreshSession({ silent: true });
@@ -180,18 +177,12 @@ export default function WorkerProfilePage() {
                   }))
                 }
               />
-              <InputField
-                label="Latitude"
-                value={availabilityForm.lat}
-                onChange={(event) =>
-                  setAvailabilityForm((current) => ({ ...current, lat: event.target.value }))
-                }
-              />
-              <InputField
-                label="Longitude"
-                value={availabilityForm.lng}
-                onChange={(event) =>
-                  setAvailabilityForm((current) => ({ ...current, lng: event.target.value }))
+              <BrowserLocationField
+                label="Worker live location"
+                description="Share your current location from the browser so the matching engine can place you in nearby emergency searches."
+                value={availabilityForm.coordinates}
+                onChange={(coordinates) =>
+                  setAvailabilityForm((current) => ({ ...current, coordinates }))
                 }
               />
               <InputField

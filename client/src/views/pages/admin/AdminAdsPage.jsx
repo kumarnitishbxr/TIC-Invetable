@@ -6,6 +6,7 @@ import PageHeader from "../../components/PageHeader.jsx";
 import SectionPanel from "../../components/SectionPanel.jsx";
 import { InputField } from "../../components/FormField.jsx";
 import { formatDate } from "../../../models/format.model.js";
+import BrowserLocationField from "../../components/BrowserLocationField.jsx";
 
 export default function AdminAdsPage() {
   const [ads, setAds] = useState([]);
@@ -16,8 +17,7 @@ export default function AdminAdsPage() {
     ctaText: "View Offer",
     ctaLink: "",
     imageUrl: "",
-    latitude: "",
-    longitude: "",
+    coordinates: null,
   });
 
   const load = async () => {
@@ -43,13 +43,7 @@ export default function AdminAdsPage() {
         ctaText: form.ctaText,
         ctaLink: form.ctaLink,
         imageUrl: form.imageUrl,
-        coordinates:
-          form.latitude && form.longitude
-            ? {
-                lat: Number(form.latitude),
-                lng: Number(form.longitude),
-              }
-            : undefined,
+        coordinates: form.coordinates || undefined,
       });
       toast.success("Ad created");
       setForm({
@@ -59,8 +53,7 @@ export default function AdminAdsPage() {
         ctaText: "View Offer",
         ctaLink: "",
         imageUrl: "",
-        latitude: "",
-        longitude: "",
+        coordinates: null,
       });
       await load();
     } catch (error) {
@@ -73,7 +66,7 @@ export default function AdminAdsPage() {
       <PageHeader
         eyebrow="Admin ads"
         title="Manage hyper-local banner inventory"
-        description="Create and toggle sponsored units for tracking screens, organized by category and local coordinates."
+        description="Create and toggle sponsored units for tracking screens, with optional browser-captured targeting coordinates."
       />
 
       <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
@@ -121,18 +114,12 @@ export default function AdminAdsPage() {
                 setForm((current) => ({ ...current, imageUrl: event.target.value }))
               }
             />
-            <InputField
-              label="Latitude"
-              value={form.latitude}
-              onChange={(event) =>
-                setForm((current) => ({ ...current, latitude: event.target.value }))
-              }
-            />
-            <InputField
-              label="Longitude"
-              value={form.longitude}
-              onChange={(event) =>
-                setForm((current) => ({ ...current, longitude: event.target.value }))
+            <BrowserLocationField
+              label="Target location"
+              description="Capture the current browser location if this ad should target one local area. Leave it empty to keep the ad broadly usable."
+              value={form.coordinates}
+              onChange={(coordinates) =>
+                setForm((current) => ({ ...current, coordinates }))
               }
             />
             <button className="k-btn w-full" type="submit">
