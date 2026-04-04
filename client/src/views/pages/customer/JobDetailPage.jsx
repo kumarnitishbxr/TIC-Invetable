@@ -14,6 +14,7 @@ import {
   raiseDisputeRequest,
   selectWorkerRequest,
 } from "../../../models/job.model.js";
+import { expressInterestRequest } from "../../../models/worker.model.js";
 import MotionPage from "../../components/MotionPage.jsx";
 import PageHeader from "../../components/PageHeader.jsx";
 import SectionPanel from "../../components/SectionPanel.jsx";
@@ -22,6 +23,7 @@ import StatusBadge from "../../components/StatusBadge.jsx";
 import { formatCurrency, formatDateTime } from "../../../models/format.model.js";
 import { InputField, TextAreaField } from "../../components/FormField.jsx";
 import EmptyState from "../../components/EmptyState.jsx";
+import VoiceComposerField from "../../components/VoiceComposerField.jsx";
 
 export default function JobDetailPage() {
   const { jobId } = useParams();
@@ -30,6 +32,8 @@ export default function JobDetailPage() {
   const [tracking, setTracking] = useState(null);
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // --- existing forms (customer/admin actions) ---
   const [completeForm, setCompleteForm] = useState({
     finalQuotedAmount: "",
     workSummary: "",
@@ -42,10 +46,29 @@ export default function JobDetailPage() {
   const [cancelReason, setCancelReason] = useState("");
   const [warrantyNotes, setWarrantyNotes] = useState("");
 
+  // --- NEW: worker interest / application draft ---
+  const [interestDraft, setInterestDraft] = useState({
+    message: "",
+    quoteAmount: "",
+    quoteText: "",
+    boostProfile: false,
+    voiceTranscript: "",
+  });
+  const [submittingInterest, setSubmittingInterest] = useState(false);
+
   const isAdmin = user?.role === "admin";
-  const isCustomer = String(job?.customer?._id || job?.customer || "") === String(user?._id);
+  const isCustomer =
+    String(job?.customer?._id || job?.customer || "") === String(user?._id);
   const isWorker =
-    String(job?.selectedWorker?._id || job?.selectedWorker || "") === String(user?._id);
+    String(job?.selectedWorker?._id || job?.selectedWorker || "") ===
+    String(user?._id);
+
+  // Has this worker already applied?
+  const hasApplied =
+    user?.activeMode === "worker" &&
+    (job?.applications || []).some(
+      (app) => String(app.worker?._id || app.worker || "") === String(user?._id),
+    );
 
   const load = async () => {
     setLoading(true);
@@ -57,7 +80,14 @@ export default function JobDetailPage() {
       setJob(jobResponse.data.job);
       setTracking(trackingResponse.data.tracking);
 
-      if (isAdmin || String(jobResponse.data.job?.customer?._id || jobResponse.data.job?.customer || "") === String(user?._id)) {
+      if (
+        isAdmin ||
+        String(
+          jobResponse.data.job?.customer?._id ||
+            jobResponse.data.job?.customer ||
+            "",
+        ) === String(user?._id)
+      ) {
         try {
           const matchesResponse = await getJobMatchesRequest(jobId);
           setMatches(matchesResponse.data.nearbyWorkers || []);
@@ -77,14 +107,45 @@ export default function JobDetailPage() {
   const withRefresh = async (action, successMessage) => {
     try {
       await action();
-      if (successMessage) {
-        toast.success(successMessage);
-      }
+      if (successMessage) toast.success(successMessage);
       await load();
     } catch (error) {
       toast.error(error.response?.data?.message || "Action failed");
     }
   };
+
+  // --- NEW: submit interest handler ---
+  const submitInterest = async () => {
+    setSubmittingInterest(true);
+    try {
+      await expressInterestRequest(jobId, {
+        message: interestDraft.message,
+        quoteAmount: interestDraft.quoteAmount,
+        quoteText: interestDraft.quoteText,
+        boostProfile: Boolean(interestDraft.boostProfile),
+        voiceInput: {
+          transcript: interestDraft.voiceTranscript,
+          language: user?.preferredLanguage || "Hindi",
+          speakerRole: "worker",
+        },
+      });
+      toast.success("Interest sent successfully!");
+      setInterestDraft({
+        message: "",
+        quoteAmount: "",
+        quoteText: "",
+        boostProfile: false,
+        voiceTranscript: "",
+      });
+      await load();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Could not send interest");
+    } finally {
+      setSubmittingInterest(false);
+    }
+  };
+
+  // ---------- render ----------
 
   if (loading) {
     return (
@@ -99,11 +160,17 @@ export default function JobDetailPage() {
   }
 
   const applications = [...(job.applications || [])].sort((left, right) => {
-    if (left.isBoosted !== right.isBoosted) {
-      return left.isBoosted ? -1 : 1;
-    }
+    if (left.isBoosted !== right.isBoosted) return left.isBoosted ? -1 : 1;
     return new Date(right.submittedAt) - new Date(left.submittedAt);
   });
+
+  // Worker can send interest only when job is broadcasting and hasn't applied yet
+  const canSendInterest =
+    user?.activeMode === "worker" &&
+    job.status === "broadcasting" &&
+    !hasApplied &&
+    !isCustomer &&
+    !isAdmin;
 
   return (
     <MotionPage className="space-y-8">
@@ -114,6 +181,7 @@ export default function JobDetailPage() {
         actions={<StatusBadge value={job.status} />}
       />
 
+      {/* ── Job details ── */}
       <SectionPanel>
         <DetailGrid
           items={[
@@ -135,21 +203,18 @@ export default function JobDetailPage() {
         />
       </SectionPanel>
 
+      {/* ── Tracking ── */}
       {tracking ? (
         <div className="grid gap-6 xl:grid-cols-[1fr_0.8fr]">
           <SectionPanel>
             <p className="section-label">Trust and tracking</p>
             <div className="mt-4 space-y-4 text-sm leading-7 text-base-content/70">
-              <p>
-                SOS enabled: {tracking.trustAndSafety?.sosEnabled ? "Yes" : "No"}
-              </p>
+              <p>SOS enabled: {tracking.trustAndSafety?.sosEnabled ? "Yes" : "No"}</p>
               <p>
                 Verified ID tracking:{" "}
                 {tracking.trustAndSafety?.verifiedIdTracking ? "Enabled" : "Disabled"}
               </p>
-              <p>
-                Warranty status: {tracking.warranty?.status || "inactive"}
-              </p>
+              <p>Warranty status: {tracking.warranty?.status || "inactive"}</p>
             </div>
           </SectionPanel>
 
@@ -181,6 +246,7 @@ export default function JobDetailPage() {
         </div>
       ) : null}
 
+      {/* ── Nearby workers (customer / admin) ── */}
       {(isCustomer || isAdmin) && matches.length ? (
         <SectionPanel>
           <p className="section-label">Nearby workers</p>
@@ -216,7 +282,8 @@ export default function JobDetailPage() {
         </SectionPanel>
       ) : null}
 
-      {applications.length ? (
+      {/* ── Applications (customer / admin) ── */}
+      {(isCustomer || isAdmin) && applications.length ? (
         <SectionPanel>
           <p className="section-label">Applications</p>
           <h2 className="mt-2 text-2xl text-base-100">Interested workers and quotes</h2>
@@ -232,7 +299,9 @@ export default function JobDetailPage() {
                       <h3 className="text-lg text-base-100">
                         {application.worker?.Name || application.fullName}
                       </h3>
-                      {application.isBoosted ? <span className="status-chip">Boosted</span> : null}
+                      {application.isBoosted ? (
+                        <span className="status-chip">Boosted</span>
+                      ) : null}
                     </div>
                     <p className="mt-2 text-sm leading-7 text-base-content/65">
                       {application.message || application.quoteText || "No written note"}
@@ -254,22 +323,124 @@ export default function JobDetailPage() {
         </SectionPanel>
       ) : null}
 
+      {/* ══════════════════════════════════════════
+          WORKER INTEREST SECTION  ← NEW
+      ══════════════════════════════════════════ */}
+      {canSendInterest ? (
+        <SectionPanel warm>
+          <p className="section-label">Express interest</p>
+          <h2 className="mt-2 text-2xl text-base-100">Send your quote to the customer</h2>
+          <p className="mt-2 text-sm leading-7 text-base-content/60">
+            Fill in your message and quote. Boosting your profile for ₹10 places you at the
+            top of the list.
+          </p>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {/* Left column */}
+            <TextAreaField
+              label="Message to customer"
+              value={interestDraft.message}
+              onChange={(e) =>
+                setInterestDraft((prev) => ({ ...prev, message: e.target.value }))
+              }
+            />
+
+            {/* Right column */}
+            <div className="space-y-4">
+              <InputField
+                label="Quote amount (₹)"
+                type="number"
+                value={interestDraft.quoteAmount}
+                onChange={(e) =>
+                  setInterestDraft((prev) => ({ ...prev, quoteAmount: e.target.value }))
+                }
+              />
+              <InputField
+                label="Quote note"
+                value={interestDraft.quoteText}
+                onChange={(e) =>
+                  setInterestDraft((prev) => ({ ...prev, quoteText: e.target.value }))
+                }
+              />
+              <VoiceComposerField
+                label="Voice transcript (optional)"
+                value={interestDraft.voiceTranscript}
+                language={
+                  user?.preferredLanguage === "Bhojpuri" ? "hi-IN" : "hi-IN"
+                }
+                onChange={(value) =>
+                  setInterestDraft((prev) => ({ ...prev, voiceTranscript: value }))
+                }
+              />
+
+              {/* Boost toggle */}
+              <label className="flex items-center justify-between rounded-[1.25rem] border border-white/6 bg-white/3 px-4 py-3 cursor-pointer">
+                <div>
+                  <span className="text-sm text-base-content/70">Boost my profile</span>
+                  <p className="text-xs text-base-content/45 mt-0.5">
+                    Appear at the top · ₹10 deducted from wallet
+                  </p>
+                </div>
+                <input
+                  checked={Boolean(interestDraft.boostProfile)}
+                  className="toggle toggle-warning"
+                  type="checkbox"
+                  onChange={(e) =>
+                    setInterestDraft((prev) => ({
+                      ...prev,
+                      boostProfile: e.target.checked,
+                    }))
+                  }
+                />
+              </label>
+
+              {/* Submit */}
+              <button
+                className="k-btn w-full"
+                disabled={submittingInterest}
+                onClick={submitInterest}
+              >
+                {submittingInterest ? (
+                  <span className="loading loading-spinner loading-sm" />
+                ) : (
+                  "Send interest"
+                )}
+              </button>
+            </div>
+          </div>
+        </SectionPanel>
+      ) : null}
+
+      {/* Already applied — show status */}
+      {user?.activeMode === "worker" && hasApplied && !isCustomer && !isAdmin ? (
+        <SectionPanel>
+          <p className="section-label">Your application</p>
+          <h2 className="mt-2 text-2xl text-base-100">Interest already sent ✓</h2>
+          <p className="mt-2 text-sm leading-7 text-base-content/60">
+            You have already expressed interest in this job. The customer will review your
+            quote and get back to you.
+          </p>
+        </SectionPanel>
+      ) : null}
+
+      {/* ── Customer / Admin action panels ── */}
       <div className="grid gap-6 xl:grid-cols-2">
-        {(isCustomer || isAdmin) && ["broadcasting", "worker_selected", "in_progress"].includes(job.status) ? (
+        {(isCustomer || isAdmin) &&
+        ["broadcasting", "worker_selected", "in_progress"].includes(job.status) ? (
           <SectionPanel>
             <p className="section-label">Cancellation</p>
             <h2 className="mt-2 text-2xl text-base-100">Cancel booking</h2>
             <form
               className="mt-5 space-y-4"
-              onSubmit={(event) => {
-                event.preventDefault();
+              onSubmit={(e) => {
+                e.preventDefault();
                 withRefresh(() => cancelJobRequest(jobId, cancelReason), "Job cancelled");
               }}
             >
               <TextAreaField
                 label="Reason"
                 value={cancelReason}
-                onChange={(event) => setCancelReason(event.target.value)}
+                onChange={(e) => setCancelReason(e.target.value)}
               />
               <button className="k-btn-ghost" type="submit">
                 Cancel job
@@ -296,14 +467,15 @@ export default function JobDetailPage() {
           </SectionPanel>
         ) : null}
 
-        {(isWorker || isAdmin) && ["in_progress", "worker_selected"].includes(job.status) ? (
+        {(isWorker || isAdmin) &&
+        ["in_progress", "worker_selected"].includes(job.status) ? (
           <SectionPanel warm>
             <p className="section-label">Worker closeout</p>
             <h2 className="mt-2 text-2xl text-base-100">Mark work completed</h2>
             <form
               className="mt-5 space-y-4"
-              onSubmit={(event) => {
-                event.preventDefault();
+              onSubmit={(e) => {
+                e.preventDefault();
                 withRefresh(
                   () => markWorkCompletedRequest(jobId, completeForm),
                   "Marked as completed",
@@ -313,21 +485,18 @@ export default function JobDetailPage() {
               <InputField
                 label="Final quoted amount"
                 value={completeForm.finalQuotedAmount}
-                onChange={(event) =>
-                  setCompleteForm((current) => ({
-                    ...current,
-                    finalQuotedAmount: event.target.value,
+                onChange={(e) =>
+                  setCompleteForm((prev) => ({
+                    ...prev,
+                    finalQuotedAmount: e.target.value,
                   }))
                 }
               />
               <TextAreaField
                 label="Work summary"
                 value={completeForm.workSummary}
-                onChange={(event) =>
-                  setCompleteForm((current) => ({
-                    ...current,
-                    workSummary: event.target.value,
-                  }))
+                onChange={(e) =>
+                  setCompleteForm((prev) => ({ ...prev, workSummary: e.target.value }))
                 }
               />
               <button className="k-btn" type="submit">
@@ -340,11 +509,13 @@ export default function JobDetailPage() {
         {(isCustomer || isAdmin) && job.status === "completed_pending_confirmation" ? (
           <SectionPanel>
             <p className="section-label">Confirmation</p>
-            <h2 className="mt-2 text-2xl text-base-100">Confirm within the 2-hour window</h2>
+            <h2 className="mt-2 text-2xl text-base-100">
+              Confirm within the 2-hour window
+            </h2>
             <form
               className="mt-5 space-y-4"
-              onSubmit={(event) => {
-                event.preventDefault();
+              onSubmit={(e) => {
+                e.preventDefault();
                 withRefresh(
                   () => confirmJobCompletionRequest(jobId, confirmForm),
                   "Job confirmed",
@@ -357,21 +528,18 @@ export default function JobDetailPage() {
                 min="1"
                 max="5"
                 value={confirmForm.rating}
-                onChange={(event) =>
-                  setConfirmForm((current) => ({
-                    ...current,
-                    rating: Number(event.target.value),
+                onChange={(e) =>
+                  setConfirmForm((prev) => ({
+                    ...prev,
+                    rating: Number(e.target.value),
                   }))
                 }
               />
               <TextAreaField
                 label="Review"
                 value={confirmForm.review}
-                onChange={(event) =>
-                  setConfirmForm((current) => ({
-                    ...current,
-                    review: event.target.value,
-                  }))
+                onChange={(e) =>
+                  setConfirmForm((prev) => ({ ...prev, review: e.target.value }))
                 }
               />
               <button className="k-btn" type="submit">
@@ -381,21 +549,25 @@ export default function JobDetailPage() {
           </SectionPanel>
         ) : null}
 
-        {(isCustomer || isAdmin) && ["completed_pending_confirmation", "completed"].includes(job.status) ? (
+        {(isCustomer || isAdmin) &&
+        ["completed_pending_confirmation", "completed"].includes(job.status) ? (
           <SectionPanel warm>
             <p className="section-label">Support</p>
             <h2 className="mt-2 text-2xl text-base-100">Dispute or warranty flows</h2>
             <form
               className="mt-5 space-y-4"
-              onSubmit={(event) => {
-                event.preventDefault();
-                withRefresh(() => raiseDisputeRequest(jobId, { issue }), "Dispute raised");
+              onSubmit={(e) => {
+                e.preventDefault();
+                withRefresh(
+                  () => raiseDisputeRequest(jobId, { issue }),
+                  "Dispute raised",
+                );
               }}
             >
               <TextAreaField
                 label="Dispute notes"
                 value={issue}
-                onChange={(event) => setIssue(event.target.value)}
+                onChange={(e) => setIssue(e.target.value)}
               />
               <button className="k-btn-ghost" type="submit">
                 Raise dispute
@@ -405,8 +577,8 @@ export default function JobDetailPage() {
             {job.warranty?.status === "active" ? (
               <form
                 className="mt-6 space-y-4 surface-divider pt-6"
-                onSubmit={(event) => {
-                  event.preventDefault();
+                onSubmit={(e) => {
+                  e.preventDefault();
                   withRefresh(
                     () => claimWarrantyRequest(jobId, { notes: warrantyNotes }),
                     "Warranty claimed",
@@ -416,7 +588,7 @@ export default function JobDetailPage() {
                 <TextAreaField
                   label="Warranty claim notes"
                   value={warrantyNotes}
-                  onChange={(event) => setWarrantyNotes(event.target.value)}
+                  onChange={(e) => setWarrantyNotes(e.target.value)}
                 />
                 <button className="k-btn" type="submit">
                   Claim 7-day warranty
