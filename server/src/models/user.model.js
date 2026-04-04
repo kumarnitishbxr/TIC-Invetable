@@ -1,75 +1,16 @@
 import mongoose from "mongoose";
 
-<<<<<<< HEAD
-const geoPointSchema = new mongoose.Schema(
-    {
-=======
-const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
-    },
-    contact: {
-        type: Number,
-        required: true,
-        minLength: 10,
-        unique: true
-    },
-    emailId: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    password: {
-        type: String,
-        required: true,
-        minLength: [6, "password must be 6 digits long"]
-    },
-    aadhar: {
-        type: Number,
-        minLength: [12, "aadhar must be 12 digits long"]
-    },
-    role: {
-        type: String,
-        enum: ['employee', 'employer', 'mediator', 'admin'],
-        default: 'employee',
-        required: true
-    },
-    skills: {
-        type: [String],
-        default: []
-    },
-    verified: {
-        type: Boolean,
-        default: false
-    },
-    rating:{
-        type: Number,
-        default: 0
-    },
-    ratingCount: {
-        type: Number,
-        default: 0
-    },
-    isBlocked: {
-        type: Boolean,
-        default: false
-    },
-    location: {
->>>>>>> ac88222 (Removed frontend from project)
-        type: {
-            type: String,
+const geoPointSchema = new mongoose.Schema({
+        type:{
+            type:String,
             enum: ["Point"],
-            default: "Point",
+            default: "Point"
         },
-        coordinates: {
-            type: [Number],
-            default: [0, 0],
-        },
-    },
-    { _id: false },
-);
-
+        Coordinates:{
+            type:[Number],
+            default: [0,0]
+        }
+})
 const workerProfileSchema = new mongoose.Schema(
     {
         headline: {
