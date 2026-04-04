@@ -464,7 +464,7 @@ export const selectWorker = async (req, res) => {
         }
 
         if (
-            getNormalizedRole(req.user.role) !== "admin" &&
+            getNormalizedRole(req.user.role) !== "customer" &&
             !isSameEntity(job.customer, req.user._id)
         ) {
             return res.status(403).json({

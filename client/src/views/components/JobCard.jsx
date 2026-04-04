@@ -1,16 +1,28 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { MapPin, RadioTower, Sparkles, Wallet } from "lucide-react";
+import { MapPin, RadioTower, Sparkles, UserRound, Wallet } from "lucide-react";
 import StatusBadge from "./StatusBadge.jsx";
 import { formatCurrency, formatDateTime } from "../../models/format.model.js";
 
-export default function JobCard({ job, href, action }) {
+const PROGRESS_LABELS = {
+  broadcasting: "Waiting for worker interest",
+  worker_selected: "Assigned and on the way",
+  in_progress: "Repair in progress",
+  completed_pending_confirmation: "Awaiting your confirmation",
+  completed: "Closed successfully",
+  cancelled: "Cancelled",
+  disputed: "Dispute open",
+  warranty_claimed: "Warranty revisit requested",
+};
+
+export default function JobCard({ job, href, action, showAssignment = false }) {
   const amount =
     job?.pricing?.standardRate ||
     job?.pricing?.inspectionFee ||
     job?.pricing?.totalUserPayable ||
     job?.wage ||
     0;
+  const assignedWorkerName = job?.selectedWorker?.Name || "";
 
   return (
     <motion.article
@@ -50,6 +62,26 @@ export default function JobCard({ job, href, action }) {
             <span>{formatDateTime(job.createdAt)}</span>
           </div>
         </div>
+
+        {showAssignment ? (
+          <div className="rounded-[1.2rem] border border-white/6 bg-white/3 px-4 py-3">
+            <div className="grid gap-3 md:grid-cols-2">
+              <div className="flex items-center gap-2 text-sm">
+                <UserRound className="h-4 w-4 text-warning" />
+                <span className="text-base-content/55">Assigned to:</span>
+                <span className="text-base-100">
+                  {assignedWorkerName || "No worker assigned yet"}
+                </span>
+              </div>
+              <div className="text-sm">
+                <span className="text-base-content/55">Progress:</span>{" "}
+                <span className="text-base-100">
+                  {PROGRESS_LABELS[job?.status] || "Status unavailable"}
+                </span>
+              </div>
+            </div>
+          </div>
+        ) : null}
 
         <div className="flex items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">

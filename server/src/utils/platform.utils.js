@@ -72,7 +72,8 @@ const CROSS_SELL_MAP = {
         {
             serviceCode: "switchboard-repair",
             title: "Safety Check for Switchboards",
-            description: "Get nearby boards inspected before small faults turn risky.",
+            description:
+                "Get nearby boards inspected before small faults turn risky.",
         },
     ],
     Plumbing: [
@@ -86,7 +87,8 @@ const CROSS_SELL_MAP = {
         {
             serviceCode: "deep-cleaning-room",
             title: "Full Home Deep Cleaning",
-            description: "Schedule a follow-up cleaning and save another emergency trip.",
+            description:
+                "Schedule a follow-up cleaning and save another emergency trip.",
         },
     ],
 };
@@ -116,7 +118,11 @@ export const normaliseCoordinates = (coordinates) => {
     };
 };
 
-export const buildVoiceInput = (voiceInput, fallbackText = "", speakerRole = "customer") => {
+export const buildVoiceInput = (
+    voiceInput,
+    fallbackText = "",
+    speakerRole = "customer",
+) => {
     if (!voiceInput && !fallbackText) {
         return {
             transcript: "",
