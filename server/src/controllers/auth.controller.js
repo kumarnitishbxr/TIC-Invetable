@@ -37,6 +37,7 @@ const createToken = (user) => {
 };
 
 export const Register = async (req, res) => {
+<<<<<<< HEAD
     try {
         const {
             emailId,
@@ -53,6 +54,12 @@ export const Register = async (req, res) => {
         } = req.body;
 
         if (!emailId || !password || !contact || !Name) {
+=======
+    try{
+        const { emailId, password, contact, firstName} = req.body;
+
+        if(!emailId || !password || !contact || !firstName) {
+>>>>>>> ac88222 (Removed frontend from project)
             return res.status(400).json({
                 success: false,
                 message: "All required fields must be provided",
@@ -109,11 +116,22 @@ export const Register = async (req, res) => {
 
         return res.status(201).json({
             success: true,
+<<<<<<< HEAD
             message: "User registered successfully",
             Token,
             user: buildPublicUser(user),
         });
     } catch (err) {
+=======
+            message: 'User registered successfully',
+            userId: user._id,
+            firstName: user.firstName,
+            emailId: user.emailId,
+            contact: user.contact,
+            role: user.role
+        })
+    }catch(err){
+>>>>>>> ac88222 (Removed frontend from project)
         return res.status(500).json({
             success: false,
             message: "Register controller error",
@@ -199,12 +217,23 @@ export const Logout = async (req, res) => {
     }
 };
 
+<<<<<<< HEAD
 export const validUser = async (req, res) =>
     res.status(200).json({
         success: true,
         user: buildPublicUser(req.user),
         message: "Valid user",
     });
+=======
+export const validUser = async (req, res) => {
+   const reply = {
+      success: true,
+      firstName: req.user?.firstName,
+      emailId: req.user?.emailId,
+      _id: req.user?._id,
+      role: req.user?.role
+   }
+>>>>>>> ac88222 (Removed frontend from project)
 
 export const updateMode = async (req, res) => {
     const { activeMode } = req.body;
