@@ -188,12 +188,10 @@ export default function CreateJobPage() {
             <VoiceComposerField
               label="Voice transcript"
               value={form.voiceTranscript}
-              language={
-                form.language === "Bhojpuri"
-                  ? "hi-IN"
-                  : `${form.language.slice(0, 2).toLowerCase()}-IN`
+              language={form.language}
+              onChange={(value) =>
+                setForm((current) => ({ ...current, voiceTranscript: value }))
               }
-              onChange={(value) => setForm((c) => ({ ...c, voiceTranscript: value }))}
             />
             <SelectField
               label="Voice language"

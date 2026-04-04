@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
+import {
+  CheckCircle2,
+  Clock3,
+  MapPin,
+  ShieldCheck,
+  Star,
+  UserRound,
+} from "lucide-react";
 import { useAppController } from "../../../controllers/AppController.jsx";
 import {
   cancelJobRequest,
@@ -20,7 +28,10 @@ import PageHeader from "../../components/PageHeader.jsx";
 import SectionPanel from "../../components/SectionPanel.jsx";
 import DetailGrid from "../../components/DetailGrid.jsx";
 import StatusBadge from "../../components/StatusBadge.jsx";
-import { formatCurrency, formatDateTime } from "../../../models/format.model.js";
+import {
+  formatCurrency,
+  formatDateTime,
+} from "../../../models/format.model.js";
 import { InputField, TextAreaField } from "../../components/FormField.jsx";
 import EmptyState from "../../components/EmptyState.jsx";
 import VoiceComposerField from "../../components/VoiceComposerField.jsx";
@@ -102,7 +113,7 @@ export default function JobDetailPage() {
 
   useEffect(() => {
     load();
-  }, [jobId]);
+  }, [jobId, user?._id]);
 
   const withRefresh = async (action, successMessage) => {
     try {
@@ -156,7 +167,12 @@ export default function JobDetailPage() {
   }
 
   if (!job) {
-    return <EmptyState title="Job not found" copy="The selected job could not be loaded." />;
+    return (
+      <EmptyState
+        title="Job not found"
+        copy="The selected job could not be loaded."
+      />
+    );
   }
 
   const applications = [...(job.applications || [])].sort((left, right) => {
@@ -190,15 +206,27 @@ export default function JobDetailPage() {
             { label: "Pricing model", value: job.pricingModel },
             {
               label: "Customer payable",
-              value: formatCurrency(job.pricing?.totalUserPayable || job.wage || 0),
+              value: formatCurrency(
+                job.pricing?.totalUserPayable || job.wage || 0,
+              ),
             },
-            { label: "Rocket mode", value: job.rocketMode?.enabled ? "Enabled" : "Off" },
+            {
+              label: "Rocket mode",
+              value: job.rocketMode?.enabled ? "Enabled" : "Off",
+            },
             { label: "Created", value: formatDateTime(job.createdAt) },
             {
               label: "Dispute window ends",
               value: formatDateTime(job.timeline?.disputeWindowEndsAt),
             },
-            { label: "Warranty ends", value: formatDateTime(job.warranty?.endsAt) },
+            {
+              label: "Warranty ends",
+              value: formatDateTime(job.warranty?.endsAt),
+            },
+            {
+              label: "Selected worker",
+              value: job.selectedWorker?.Name || "Not assigned yet",
+            },
           ]}
         />
       </SectionPanel>
@@ -212,7 +240,9 @@ export default function JobDetailPage() {
               <p>SOS enabled: {tracking.trustAndSafety?.sosEnabled ? "Yes" : "No"}</p>
               <p>
                 Verified ID tracking:{" "}
-                {tracking.trustAndSafety?.verifiedIdTracking ? "Enabled" : "Disabled"}
+                {tracking.trustAndSafety?.verifiedIdTracking
+                  ? "Enabled"
+                  : "Disabled"}
               </p>
               <p>Warranty status: {tracking.warranty?.status || "inactive"}</p>
             </div>
@@ -225,7 +255,9 @@ export default function JobDetailPage() {
                 <p className="text-xs uppercase tracking-[0.18em] text-base-content/45">
                   Sponsored
                 </p>
-                <h3 className="mt-2 text-lg text-base-100">{tracking.trackingAd.title}</h3>
+                <h3 className="mt-2 text-lg text-base-100">
+                  {tracking.trackingAd.title}
+                </h3>
                 <p className="mt-1 text-sm text-base-content/60">
                   {tracking.trackingAd.businessName}
                 </p>
@@ -238,7 +270,9 @@ export default function JobDetailPage() {
                   className="rounded-[1.4rem] border border-white/6 bg-white/3 px-4 py-4"
                 >
                   <h4 className="text-base text-base-100">{item.title}</h4>
-                  <p className="mt-1 text-sm text-base-content/60">{item.description}</p>
+                  <p className="mt-1 text-sm text-base-content/60">
+                    {item.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -250,7 +284,14 @@ export default function JobDetailPage() {
       {(isCustomer || isAdmin) && matches.length ? (
         <SectionPanel>
           <p className="section-label">Nearby workers</p>
-          <h2 className="mt-2 text-2xl text-base-100">Instant dispatch candidates</h2>
+          <h2 className="mt-2 text-2xl text-base-100">
+            Broadcast reach in your radius
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-base-content/60">
+            These are workers currently in range. The actual assignment should
+            happen from the interested workers list once they apply or send a
+            quote.
+          </p>
           <div className="mt-6 grid gap-4">
             {matches.map((worker) => (
               <div
@@ -261,20 +302,17 @@ export default function JobDetailPage() {
                   <div>
                     <h3 className="text-lg text-base-100">{worker.Name}</h3>
                     <p className="text-sm text-base-content/60">
-                      {worker.workerProfile?.headline || "Nearby verified worker"}
+                      {worker.workerProfile?.headline ||
+                        "Nearby verified worker"}
                     </p>
                   </div>
-                  <button
-                    className="k-btn"
-                    onClick={() =>
-                      withRefresh(
-                        () => selectWorkerRequest(jobId, worker._id),
-                        "Worker selected",
-                      )
+                  <StatusBadge
+                    value={
+                      worker.subscription?.status === "active"
+                        ? "active"
+                        : "inactive"
                     }
-                  >
-                    Select worker
-                  </button>
+                  />
                 </div>
               </div>
             ))}
@@ -286,7 +324,13 @@ export default function JobDetailPage() {
       {(isCustomer || isAdmin) && applications.length ? (
         <SectionPanel>
           <p className="section-label">Applications</p>
-          <h2 className="mt-2 text-2xl text-base-100">Interested workers and quotes</h2>
+          <h2 className="mt-2 text-2xl text-base-100">
+            Interested workers and quotes
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-base-content/60">
+            Assign the job from this list. Only workers who actually showed
+            interest can be selected.
+          </p>
           <div className="mt-6 grid gap-4">
             {applications.map((application) => (
               <div
@@ -452,14 +496,20 @@ export default function JobDetailPage() {
         {(isWorker || isAdmin) && job.status === "worker_selected" ? (
           <SectionPanel>
             <p className="section-label">Arrival</p>
-            <h2 className="mt-2 text-2xl text-base-100">Mark on-site arrival</h2>
+            <h2 className="mt-2 text-2xl text-base-100">
+              Mark on-site arrival
+            </h2>
             <p className="mt-3 text-sm leading-7 text-base-content/65">
-              This starts the in-progress timer and unlocks the worker completion flow.
+              This starts the in-progress timer and unlocks the worker
+              completion flow.
             </p>
             <button
               className="k-btn mt-6"
               onClick={() =>
-                withRefresh(() => markWorkerArrivedRequest(jobId), "Arrival marked")
+                withRefresh(
+                  () => markWorkerArrivedRequest(jobId),
+                  "Arrival marked",
+                )
               }
             >
               Mark arrived
@@ -506,7 +556,8 @@ export default function JobDetailPage() {
           </SectionPanel>
         ) : null}
 
-        {(isCustomer || isAdmin) && job.status === "completed_pending_confirmation" ? (
+        {(isCustomer || isAdmin) &&
+          job.status === "completed_pending_confirmation" ? (
           <SectionPanel>
             <p className="section-label">Confirmation</p>
             <h2 className="mt-2 text-2xl text-base-100">
@@ -553,7 +604,9 @@ export default function JobDetailPage() {
         ["completed_pending_confirmation", "completed"].includes(job.status) ? (
           <SectionPanel warm>
             <p className="section-label">Support</p>
-            <h2 className="mt-2 text-2xl text-base-100">Dispute or warranty flows</h2>
+            <h2 className="mt-2 text-2xl text-base-100">
+              Dispute or warranty flows
+            </h2>
             <form
               className="mt-5 space-y-4"
               onSubmit={(e) => {

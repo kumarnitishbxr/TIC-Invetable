@@ -146,7 +146,12 @@ export default function CustomerDashboardPage() {
         ) : jobs.length ? (
           <div className="grid gap-4">
             {jobs.map((job) => (
-              <JobCard key={job._id} href={`/app/customer/jobs/${job._id}`} job={job} />
+              <JobCard
+                key={job._id}
+                href={`/app/customer/jobs/${job._id}`}
+                job={job}
+                showAssignment
+              />
             ))}
           </div>
         ) : (
