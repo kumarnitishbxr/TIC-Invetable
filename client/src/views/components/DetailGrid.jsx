@@ -4,7 +4,7 @@ export default function DetailGrid({ items }) {
       {items.map((item) => (
         <div
           key={item.label}
-          className="rounded-[1.5rem] border border-white/6 bg-white/3 px-4 py-4"
+          className="rounded-3xl border border-white/6 bg-white/3 px-4 py-4"
         >
           <p className="text-xs uppercase tracking-[0.2em] text-base-content/45">
             {item.label}

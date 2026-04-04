@@ -96,7 +96,7 @@ const canAccessJob = (user, job) => {
         return false;
     }
 
-    if (getNormalizedRole(user.role) === "admin") {
+    if (getNormalizedRole(user.role) === "admin" || "customer") {
         return true;
     }
 
@@ -382,7 +382,6 @@ export const listMyJobs = async (req, res) => {
 
 export const getJobDetails = async (req, res) => {
     const { jobId } = req.params;
-
     if (!mongoose.Types.ObjectId.isValid(jobId)) {
         return res.status(400).json({
             success: false,
