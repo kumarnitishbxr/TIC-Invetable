@@ -104,7 +104,7 @@ export default function App() {
         <Route path="admin/ads" element={<AdminAdsPage />} />
       </Route>
 
-      <Route path="*" element={<NotFoundPage />} />
+      <Route path="*" element={<Navigate to='/login' />} />
     </Routes>
   );
 }
