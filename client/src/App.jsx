@@ -74,6 +74,8 @@ export default function App() {
           }
         /></Route>
 
+
+
       <Route
         path="/app"
         element={
@@ -83,6 +85,8 @@ export default function App() {
         }
       >
         <Route index element={<AppEntryRedirect />} />
+
+        {/* VALID ROUTES */}
         <Route path="profile" element={<SharedProfilePage />} />
 
         <Route path="customer/dashboard" element={<CustomerDashboardPage />} />
@@ -102,6 +106,8 @@ export default function App() {
         <Route path="admin/disputes" element={<AdminDisputesPage />} />
         <Route path="admin/disputes/:disputeId" element={<AdminDisputeDetailPage />} />
         <Route path="admin/ads" element={<AdminAdsPage />} />
+
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />
