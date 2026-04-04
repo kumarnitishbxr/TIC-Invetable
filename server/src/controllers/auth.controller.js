@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 import redisClient from "../config/redis.config.js";
 import { validate } from "../utils/Validate.js";
 import { normaliseCoordinates } from "../utils/platform.utils.js";
-import { buildPublicUser } from "../utils/user.utils.js";
+import { buildPublicUser, getCanonicalUserState } from "../utils/user.utils.js";
 
 const getCookieOptions = () => {
     const maxAge = Number(process.env.JWT_MAX_AGE || 0);
@@ -22,11 +22,13 @@ const createToken = (user) => {
         throw new Error("JWT configuration missing");
     }
 
+    const canonicalState = getCanonicalUserState(user);
+
     return jwt.sign(
         {
             _id: user._id,
-            role: user.role,
-            activeMode: user.activeMode,
+            role: canonicalState.role,
+            activeMode: canonicalState.activeMode,
             emailId: user.emailId,
         },
         process.env.SECRET_KEY,
@@ -272,8 +274,13 @@ export const updateProfile = async (req, res) => {
     }
 
     if (workerProfile && typeof workerProfile === "object") {
+        const currentWorkerProfile =
+            typeof req.user.workerProfile?.toObject === "function"
+                ? req.user.workerProfile.toObject()
+                : req.user.workerProfile || {};
+
         req.user.workerProfile = {
-            ...req.user.workerProfile.toObject(),
+            ...currentWorkerProfile,
             ...workerProfile,
         };
     }

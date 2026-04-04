@@ -14,10 +14,28 @@ import {
 } from "../utils/platform.utils.js";
 import { findTrackingAd, processJobLifecycle } from "../utils/job.utils.js";
 import { applyWalletCredit, applyWalletDebit } from "../utils/wallet.utils.js";
-import { buildPublicUser, hasMode } from "../utils/user.utils.js";
+import { buildPublicUser, getNormalizedRole, hasMode } from "../utils/user.utils.js";
 
 const addHours = (date, hours) => new Date(date.getTime() + hours * 60 * 60 * 1000);
 const addDays = (date, days) => new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+
+const getComparableId = (value) => {
+    if (!value) {
+        return "";
+    }
+
+    if (typeof value === "string") {
+        return value;
+    }
+
+    if (value._id) {
+        return String(value._id);
+    }
+
+    return String(value);
+};
+
+const isSameEntity = (left, right) => getComparableId(left) === getComparableId(right);
 
 const jobPopulate = [
     { path: "customer", select: "Name emailId contact rating ratingCount verified coins" },
@@ -50,7 +68,7 @@ const ensureCustomerAccess = (req, res) => {
         return false;
     }
 
-    if (req.user.activeMode !== "customer" && req.user.role !== "admin") {
+    if (req.user.activeMode !== "customer" && getNormalizedRole(req.user.role) !== "admin") {
         res.status(403).json({
             success: false,
             message: "Switch to Find a Worker mode to continue",
@@ -78,20 +96,20 @@ const canAccessJob = (user, job) => {
         return false;
     }
 
-    if (user.role === "admin") {
+    if (getNormalizedRole(user.role) === "admin") {
         return true;
     }
 
-    if (String(job.customer || "") === String(user._id)) {
+    if (isSameEntity(job.customer, user._id)) {
         return true;
     }
 
-    if (String(job.selectedWorker || "") === String(user._id)) {
+    if (isSameEntity(job.selectedWorker, user._id)) {
         return true;
     }
 
     return job.applications?.some(
-        (application) => String(application.worker || "") === String(user._id),
+        (application) => isSameEntity(application.worker, user._id),
     );
 };
 
@@ -104,8 +122,10 @@ const queryNearbyWorkers = async ({ location, category, radiusKm }) => {
     const maxDistance = (radiusKm || PLATFORM_CONFIG.defaultSearchRadiusKm) * 1000;
 
     return User.find({
-        role: "user",
-        availableModes: "worker",
+        $or: [
+            { availableModes: "worker" },
+            { role: { $in: ["user", "employee", "employer", "labourer"] } },
+        ],
         verified: true,
         isBlocked: false,
         "workerProfile.isAvailable": true,
@@ -409,8 +429,8 @@ export const getJobMatches = async (req, res) => {
     }
 
     if (
-        req.user.role !== "admin" &&
-        String(job.customer || "") !== String(req.user._id)
+        getNormalizedRole(req.user.role) !== "admin" &&
+        !isSameEntity(job.customer, req.user._id)
     ) {
         return res.status(403).json({
             success: false,
@@ -445,8 +465,8 @@ export const selectWorker = async (req, res) => {
         }
 
         if (
-            req.user.role !== "admin" &&
-            String(job.customer || "") !== String(req.user._id)
+            getNormalizedRole(req.user.role) !== "admin" &&
+            !isSameEntity(job.customer, req.user._id)
         ) {
             return res.status(403).json({
                 success: false,
@@ -462,7 +482,7 @@ export const selectWorker = async (req, res) => {
         }
 
         const application = job.applications.find(
-            (entry) => String(entry.worker) === String(workerId),
+            (entry) => isSameEntity(entry.worker, workerId),
         );
 
         if (!application) {
@@ -511,7 +531,7 @@ export const selectWorker = async (req, res) => {
         job.applications = job.applications.map((entry) => ({
             ...entry.toObject(),
             status:
-                String(entry.worker) === String(worker._id) ? "selected" : "rejected",
+                isSameEntity(entry.worker, worker._id) ? "selected" : "rejected",
         }));
 
         await job.save();
@@ -543,8 +563,8 @@ export const markWorkerArrived = async (req, res) => {
     }
 
     if (
-        req.user.role !== "admin" &&
-        String(job.selectedWorker || "") !== String(req.user._id)
+        getNormalizedRole(req.user.role) !== "admin" &&
+        !isSameEntity(job.selectedWorker, req.user._id)
     ) {
         return res.status(403).json({
             success: false,
@@ -574,9 +594,9 @@ export const cancelJob = async (req, res) => {
         });
     }
 
-    const isCustomer = String(job.customer || "") === String(req.user._id);
-    const isWorker = String(job.selectedWorker || "") === String(req.user._id);
-    const isAdmin = req.user.role === "admin";
+    const isCustomer = isSameEntity(job.customer, req.user._id);
+    const isWorker = isSameEntity(job.selectedWorker, req.user._id);
+    const isAdmin = getNormalizedRole(req.user.role) === "admin";
 
     if (!isCustomer && !isWorker && !isAdmin) {
         return res.status(403).json({
@@ -632,8 +652,8 @@ export const markWorkCompleted = async (req, res) => {
     }
 
     if (
-        req.user.role !== "admin" &&
-        String(job.selectedWorker || "") !== String(req.user._id)
+        getNormalizedRole(req.user.role) !== "admin" &&
+        !isSameEntity(job.selectedWorker, req.user._id)
     ) {
         return res.status(403).json({
             success: false,
@@ -678,8 +698,8 @@ export const confirmJobCompletion = async (req, res) => {
     }
 
     if (
-        req.user.role !== "admin" &&
-        String(job.customer || "") !== String(req.user._id)
+        getNormalizedRole(req.user.role) !== "admin" &&
+        !isSameEntity(job.customer, req.user._id)
     ) {
         return res.status(403).json({
             success: false,
@@ -748,8 +768,8 @@ export const raiseDispute = async (req, res) => {
     }
 
     if (
-        req.user.role !== "admin" &&
-        String(job.customer || "") !== String(req.user._id)
+        getNormalizedRole(req.user.role) !== "admin" &&
+        !isSameEntity(job.customer, req.user._id)
     ) {
         return res.status(403).json({
             success: false,
@@ -797,8 +817,8 @@ export const claimWarranty = async (req, res) => {
     }
 
     if (
-        req.user.role !== "admin" &&
-        String(job.customer || "") !== String(req.user._id)
+        getNormalizedRole(req.user.role) !== "admin" &&
+        !isSameEntity(job.customer, req.user._id)
     ) {
         return res.status(403).json({
             success: false,
