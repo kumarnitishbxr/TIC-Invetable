@@ -727,6 +727,17 @@ export const confirmJobCompletion = async (req, res) => {
             );
             worker.workerProfile.totalJobsCompleted =
                 Number(worker.workerProfile?.totalJobsCompleted || 0) + 1;
+            worker.workerProfile.recentReviews = [
+                {
+                    jobId: job._id,
+                    reviewerId: req.user._id,
+                    reviewerName: req.user.Name || "",
+                    rating: numericRating,
+                    review: String(review || "").trim(),
+                    createdAt: now,
+                },
+                ...(worker.workerProfile?.recentReviews || []),
+            ].slice(0, 12);
             await worker.save();
         }
 

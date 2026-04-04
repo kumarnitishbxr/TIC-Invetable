@@ -103,7 +103,6 @@ export const updateWorkerProfile = async (req, res) => {
 };
 
 export const getWorkerFeed = async (req, res) => {
-    console.log("API HIT");
     if (!ensureWorker(req, res)) {
         return;
     }
@@ -114,7 +113,6 @@ export const getWorkerFeed = async (req, res) => {
             message: "Please update your GPS location first",
         });
     }
-    console.log(req.user.availableModes, req.user.activeMode);
 
     const [lng, lat] = req.user.location.coordinates;
     const radiusKm =
@@ -125,7 +123,6 @@ export const getWorkerFeed = async (req, res) => {
         req.user.subscription?.expiresAt &&
         new Date(req.user.subscription.expiresAt) > new Date();
 
-        console.log("USER LOCATION:", req.user.location);
         
     const jobs = await Job.find({
         status: "broadcasting",
@@ -142,7 +139,6 @@ export const getWorkerFeed = async (req, res) => {
         .populate("customer", "Name verified rating ratingCount")
         .sort({ "rocketMode.enabled": -1, createdAt: -1 })
         .limit(50);
-    console.log(jobs);
     const filteredJobs = jobs.filter((job) => {
         if (
             !hasEarlyAccess &&

@@ -23,6 +23,11 @@ export default function JobCard({ job, href, action, showAssignment = false }) {
     job?.wage ||
     0;
   const assignedWorkerName = job?.selectedWorker?.Name || "";
+  const lifecycleBadges = [
+    job?.timeline?.workerArrivedAt ? "Arrived" : null,
+    job?.timeline?.workCompletedAt ? "Completed" : null,
+    job?.timeline?.closedAt ? "Closed" : null,
+  ].filter(Boolean);
 
   return (
     <motion.article
@@ -65,20 +70,46 @@ export default function JobCard({ job, href, action, showAssignment = false }) {
 
         {showAssignment ? (
           <div className="rounded-[1.2rem] border border-white/6 bg-white/3 px-4 py-3">
-            <div className="grid gap-3 md:grid-cols-2">
-              <div className="flex items-center gap-2 text-sm">
-                <UserRound className="h-4 w-4 text-warning" />
-                <span className="text-base-content/55">Assigned to:</span>
-                <span className="text-base-100">
-                  {assignedWorkerName || "No worker assigned yet"}
-                </span>
+            <div className="grid gap-3">
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="flex items-center gap-2 text-sm">
+                  <UserRound className="h-4 w-4 text-warning" />
+                  <span className="text-base-content/55">Assigned to:</span>
+                  <span className="text-base-100">
+                    {assignedWorkerName || "No worker assigned yet"}
+                  </span>
+                </div>
+                <div className="text-sm">
+                  <span className="text-base-content/55">Progress:</span>{" "}
+                  <span className="text-base-100">
+                    {PROGRESS_LABELS[job?.status] || "Status unavailable"}
+                  </span>
+                </div>
               </div>
-              <div className="text-sm">
-                <span className="text-base-content/55">Progress:</span>{" "}
-                <span className="text-base-100">
-                  {PROGRESS_LABELS[job?.status] || "Status unavailable"}
-                </span>
+
+              <div className="flex flex-wrap gap-2">
+                {lifecycleBadges.length ? (
+                  lifecycleBadges.map((badge) => (
+                    <span key={badge} className="status-chip">
+                      {badge}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-sm text-base-content/50">
+                    No lifecycle milestone reached yet
+                  </span>
+                )}
               </div>
+
+              {job?.finalRating ? (
+                <div className="text-sm">
+                  <span className="text-base-content/55">Rating:</span>{" "}
+                  <span className="text-base-100">{job.finalRating}/5</span>
+                  <span className="text-base-content/50">
+                    {job.finalReview ? ` · ${job.finalReview}` : " · Review saved"}
+                  </span>
+                </div>
+              ) : null}
             </div>
           </div>
         ) : null}

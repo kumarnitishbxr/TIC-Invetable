@@ -61,6 +61,43 @@ const workerProfileSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    recentReviews: {
+      type: [
+        new mongoose.Schema(
+          {
+            jobId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "Job",
+            },
+            reviewerId: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "User",
+            },
+            reviewerName: {
+              type: String,
+              default: "",
+              trim: true,
+            },
+            rating: {
+              type: Number,
+              min: 1,
+              max: 5,
+            },
+            review: {
+              type: String,
+              default: "",
+              trim: true,
+            },
+            createdAt: {
+              type: Date,
+              default: Date.now,
+            },
+          },
+          { _id: true },
+        ),
+      ],
+      default: [],
+    },
     penalties: {
       type: Number,
       default: 0,
