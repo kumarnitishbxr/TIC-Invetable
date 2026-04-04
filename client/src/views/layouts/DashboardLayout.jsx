@@ -57,7 +57,8 @@ export default function DashboardLayout() {
       <div className="floating-blur two" />
       <div className="floating-blur three" />
 
-      <div className="relative z-10 flex min-h-screen">
+      <div className="relative z-10 flex h-screen overflow-hidden">
+
         <motion.aside
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
@@ -67,22 +68,29 @@ export default function DashboardLayout() {
         >
           <div className="flex h-full flex-col">
             <AppLogo />
+
             <div className="mt-8 rounded-[1.75rem] border border-white/8 bg-white/4 p-4">
               <p className="text-xs uppercase tracking-[0.24em] text-base-content/45">
                 Signed in as
               </p>
+
               <div className="mt-4 flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/6">
                   <UserRound className="h-5 w-5 text-base-100" />
                 </div>
+
                 <div>
-                  <p className="text-base font-semibold text-base-100">{user?.Name}</p>
-                  <p className="text-sm text-base-content/60">{user?.emailId}</p>
+                  <p className="text-base font-semibold text-base-100">
+                    {user?.Name}
+                  </p>
+                  <p className="text-sm text-base-content/60">
+                    {user?.emailId}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <nav className="mt-8 flex flex-1 flex-col gap-2">
+            <nav className="mt-8 flex flex-1 flex-col gap-2 overflow-y-auto">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}
@@ -102,12 +110,16 @@ export default function DashboardLayout() {
               ))}
             </nav>
 
-            <div className="space-y-3">
+            <div className="space-y-3 pt-4">
               {user?.role !== "admin" ? (
                 <button className="k-btn-ghost w-full" onClick={handleModeSwitch}>
-                  Switch to {user.activeMode === "worker" ? "Find a Worker" : "Work as a Karigar"}
+                  Switch to{" "}
+                  {user.activeMode === "worker"
+                    ? "work as Employer"
+                    : "Work as a Karigar"}
                 </button>
               ) : null}
+
               <button className="k-btn-ghost w-full" onClick={handleLogout}>
                 Logout
               </button>
@@ -115,9 +127,13 @@ export default function DashboardLayout() {
           </div>
         </motion.aside>
 
-        <div className="flex-1 lg:ml-0">
-          <header className="sticky top-0 z-20 border-b border-white/6 bg-[#0a0d14]/78 px-4 py-4 backdrop-blur-xl md:px-8">
+        {/* 🔥 Main Section */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+
+          {/* 🔥 Header */}
+          <header className="sticky top-0 z-20 border-b border-white/6 bg-[#0a0d14]/80 px-4 py-4 backdrop-blur-xl md:px-8">
             <div className="flex items-center justify-between gap-4">
+
               <button
                 className="btn btn-ghost rounded-full lg:hidden"
                 onClick={() => setDrawerOpen((value) => !value)}
@@ -130,15 +146,19 @@ export default function DashboardLayout() {
                   {user?.role === "admin"
                     ? "Admin"
                     : user?.activeMode === "worker"
-                      ? "Work as a Karigar"
-                      : "Find a Worker"}
+                    ? "Work as a Karigar"
+                    : "Find a Worker"}
                 </span>
-                <span className="status-chip">{user?.preferredLanguage || "Hindi"}</span>
+
+                <span className="status-chip">
+                  {user?.preferredLanguage || "Hindi"}
+                </span>
               </div>
             </div>
           </header>
 
-          <main className="page-wrap px-4 py-6 md:px-8 md:py-8">
+          {/* 🔥 ONLY THIS SCROLLS */}
+          <main className="page-wrap flex-1 overflow-y-auto px-4 py-6 md:px-8 md:py-8">
             <Outlet />
           </main>
         </div>
