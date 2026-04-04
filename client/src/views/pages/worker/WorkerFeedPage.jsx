@@ -8,9 +8,12 @@ import SectionPanel from "../../components/SectionPanel.jsx";
 import EmptyState from "../../components/EmptyState.jsx";
 import JobCard from "../../components/JobCard.jsx";
 import { useAppController } from "../../../controllers/AppController.jsx";
+import { TextAreaField, InputField } from "../../components/FormField.jsx";
+import VoiceComposerField from "../../components/VoiceComposerField.jsx";
 
 export default function WorkerFeedPage() {
   const { user } = useAppController();
+  const [drafts, setDrafts] = useState({});
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
 
