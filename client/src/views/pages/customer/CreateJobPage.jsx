@@ -6,6 +6,7 @@ import MotionPage from "../../components/MotionPage.jsx";
 import PageHeader from "../../components/PageHeader.jsx";
 import SectionPanel from "../../components/SectionPanel.jsx";
 import { InputField, SelectField, TextAreaField } from "../../components/FormField.jsx";
+import BrowserLocationField from "../../components/BrowserLocationField.jsx";
 import VoiceComposerField from "../../components/VoiceComposerField.jsx";
 
 const categories = ["General", "Electrical", "Plumbing", "Painting", "Cleaning", "Appliance", "Carpentry", "Other"];
@@ -33,8 +34,7 @@ export default function CreateJobPage() {
     rocketMode: false,
     voiceTranscript: "",
     language: "Hindi",
-    latitude: "",
-    longitude: "",
+    coordinates: null,
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -60,10 +60,7 @@ export default function CreateJobPage() {
           language: form.language,
           speakerRole: "customer",
         },
-        coordinates: {
-          lat: Number(form.latitude),
-          lng: Number(form.longitude),
-        },
+        coordinates: form.coordinates || undefined,
       });
 
       toast.success("Job created and broadcast");
@@ -129,20 +126,16 @@ export default function CreateJobPage() {
             }
           />
 
-          <InputField
-            label="Latitude"
-            value={form.latitude}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, latitude: event.target.value }))
-            }
-          />
-          <InputField
-            label="Longitude"
-            value={form.longitude}
-            onChange={(event) =>
-              setForm((current) => ({ ...current, longitude: event.target.value }))
-            }
-          />
+          <div className="md:col-span-2">
+            <BrowserLocationField
+              label="Dispatch location"
+              description="Capture your current location so nearby verified workers can be matched automatically. If you skip this, we fall back to any saved profile location."
+              value={form.coordinates}
+              onChange={(coordinates) =>
+                setForm((current) => ({ ...current, coordinates }))
+              }
+            />
+          </div>
 
           <SelectField
             label="Pricing model"

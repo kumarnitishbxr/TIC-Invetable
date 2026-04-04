@@ -297,17 +297,23 @@ export const updateProfile = async (req, res) => {
 export const updateLocation = async (req, res) => {
     const { coordinates, locationText = "" } = req.body;
     const geoPoint = normaliseCoordinates(coordinates);
+    const nextLocationText = String(locationText || req.user.locationText || "").trim();
 
-    if (!geoPoint) {
+    if (!geoPoint && !nextLocationText) {
         return res.status(400).json({
             success: false,
-            message: "Valid coordinates are required",
+            message: "Provide coordinates or a location label",
         });
     }
 
-    req.user.location = geoPoint;
-    req.user.locationText = String(locationText || req.user.locationText || "").trim();
-    req.user.lastKnownLocationAt = new Date();
+    if (geoPoint) {
+        req.user.location = geoPoint;
+        req.user.lastKnownLocationAt = new Date();
+    }
+
+    if (locationText !== undefined || nextLocationText) {
+        req.user.locationText = nextLocationText;
+    }
 
     await req.user.save();
 

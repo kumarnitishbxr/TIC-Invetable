@@ -6,6 +6,7 @@ import MotionPage from "../components/MotionPage.jsx";
 import PageHeader from "../components/PageHeader.jsx";
 import SectionPanel from "../components/SectionPanel.jsx";
 import { InputField, TextAreaField } from "../components/FormField.jsx";
+import BrowserLocationField from "../components/BrowserLocationField.jsx";
 
 export default function SharedProfilePage() {
   const { user, updateLocation, updateProfile } = useAppController();
@@ -20,8 +21,7 @@ export default function SharedProfilePage() {
     workerAbout: user?.workerProfile?.about || "",
   });
   const [locationForm, setLocationForm] = useState({
-    lat: "",
-    lng: "",
+    coordinates: null,
     locationText: user?.locationText || "",
   });
 
@@ -53,13 +53,9 @@ export default function SharedProfilePage() {
     event.preventDefault();
     try {
       await updateLocation({
-        coordinates: {
-          lat: Number(locationForm.lat),
-          lng: Number(locationForm.lng),
-        },
+        coordinates: locationForm.coordinates || undefined,
         locationText: locationForm.locationText,
       });
-      setLocationForm((current) => ({ ...current, lat: "", lng: "" }));
     } catch (error) {
       toast.error(error.response?.data?.message || "Location update failed");
     }
@@ -173,21 +169,16 @@ export default function SharedProfilePage() {
               <h2 className="text-xl text-base-100">GPS sync</h2>
             </div>
             <p className="mt-3 text-sm leading-7 text-base-content/65">
-              Set precise coordinates so nearby job matching and local ad delivery work correctly.
+              Sync your location once from the browser so nearby matching and dispatch can work
+              without forcing you to type coordinates.
             </p>
             <form className="mt-6 space-y-4" onSubmit={saveLocation}>
-              <InputField
-                label="Latitude"
-                value={locationForm.lat}
-                onChange={(event) =>
-                  setLocationForm((current) => ({ ...current, lat: event.target.value }))
-                }
-              />
-              <InputField
-                label="Longitude"
-                value={locationForm.lng}
-                onChange={(event) =>
-                  setLocationForm((current) => ({ ...current, lng: event.target.value }))
+              <BrowserLocationField
+                label="Profile location"
+                description="Use your current browser location for faster matching. You can still update the label below even if GPS permission is unavailable."
+                value={locationForm.coordinates}
+                onChange={(coordinates) =>
+                  setLocationForm((current) => ({ ...current, coordinates }))
                 }
               />
               <InputField
