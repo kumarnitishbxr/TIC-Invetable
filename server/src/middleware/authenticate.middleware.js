@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import redisClient from "../config/redis.config.js";
-<<<<<<< HEAD
 import { getCanonicalUserState } from "../utils/user.utils.js";
 
 const getTokenFromRequest = (req) => {
@@ -17,8 +16,6 @@ const getTokenFromRequest = (req) => {
 
     return null;
 };
-=======
->>>>>>> ac88222 (Removed frontend from project)
 
 const authenticateUser = async (req, res, next) => {
     try {
